@@ -433,9 +433,7 @@ function buildAvailableBookingSlots({
   weekStart?: Date;
 }): AvailableBookingSlotDto[] {
   const today = startOfDay(new Date());
-  const start = weekStart
-    ? startOfDay(weekStart)
-    : startOfWeek(today, firstDayOfWeek);
+  const start = weekStart ? startOfDay(weekStart) : today;
   const exceptionDates = new Set(exceptions.map((date) => date.date));
   const booked = new Set(
     consultationRequests.map((request) => request.requestedStartAt)
