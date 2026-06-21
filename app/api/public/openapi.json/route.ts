@@ -8,17 +8,21 @@ export async function GET(request: Request) {
 
 function publicOrigin(request: Request) {
   const forwardedHost = request.headers.get('x-forwarded-host');
-  const forwardedProto = request.headers.get('x-forwarded-proto') ?? 'https';
 
   if (forwardedHost) {
-    return `${forwardedProto}://${forwardedHost}`;
+    return `${publicProtocol(forwardedHost)}://${forwardedHost}`;
   }
 
   const url = new URL(request.url);
   const host = request.headers.get('host') ?? url.host;
-  const protocol = url.protocol.replace(':', '');
 
-  return `${protocol}://${host}`;
+  return `${publicProtocol(host)}://${host}`;
+}
+
+function publicProtocol(host: string) {
+  return host.startsWith('localhost') || host.startsWith('127.0.0.1')
+    ? 'http'
+    : 'https';
 }
 
 function openApiSchema(origin: string) {
