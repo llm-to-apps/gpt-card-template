@@ -7,6 +7,7 @@
   "description": "Personal website card with consultation booking, using the local dev image.",
   "icon": "id-card",
   "status": "available",
+  "hot": true,
   "sortOrder": 1,
   "source": {
     "repository": "gpt-card-template-dev",
