@@ -10,14 +10,13 @@ async function main() {
     orderBy: { createdAt: 'asc' }
   });
 
-  const profile = existingProfile
-    ? await prisma.cardProfile.update({
-        where: { id: existingProfile.id },
-        data: demoProfileData()
-      })
-    : await prisma.cardProfile.create({
-        data: demoProfileData()
-      });
+  if (existingProfile) {
+    return;
+  }
+
+  const profile = await prisma.cardProfile.create({
+    data: demoProfileData()
+  });
 
   await Promise.all(
     ['en', 'de', 'ru'].map((locale) =>
