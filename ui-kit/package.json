@@ -1,0 +1,13 @@
+{
+  "name": "@os7/ui-kit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared UI kit for OS7 application templates.",
+  "type": "module",
+  "peerDependencies": {
+    "@mantine/core": "^9.3.1",
+    "@mantine/dates": "^9.3.1",
+    "@mantine/notifications": "^9.3.1",
+    "react": "^19.2.1"
+  }
+}

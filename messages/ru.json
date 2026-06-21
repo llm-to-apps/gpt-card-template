@@ -1,0 +1,72 @@
+{
+  "App": {
+    "title": "GPT Card",
+    "subtitle": "Персональный сайт-визитка со слотами для консультаций",
+    "signIn": "Войти",
+    "signOut": "Выйти",
+    "view": "Просмотр",
+    "edit": "Редактировать",
+    "save": "Сохранить",
+    "saving": "Сохраняю...",
+    "previousWeek": "Назад",
+    "nextWeek": "Вперед",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "add": "Добавить",
+    "addSlot": "Добавить слот",
+    "editSlot": "Редактировать слот",
+    "book": "Записаться",
+    "admin": "Админ",
+    "publicView": "Публичный вид",
+    "profile": "Профиль"
+  },
+  "Sections": {
+    "contacts": "Контакты",
+    "professionalProfile": "Профессиональный профиль",
+    "expertise": "Экспертиза",
+    "casesAndResults": "Кейсы и результаты",
+    "experienceAndAchievements": "Опыт и достижения",
+    "collaborationFormats": "Форматы сотрудничества",
+    "availability": "Доступность",
+    "excludedDates": "Исключённые даты",
+    "requests": "Заявки"
+  },
+  "Onboarding": {
+    "welcome": "Создайте публичную визитку",
+    "teaser": "Добавьте профиль, доступность и опубликуйте страницу, где посетители смогут запросить консультацию.",
+    "complete": "Завершить онбординг",
+    "continue": "Продолжить настройку"
+  },
+  "Fields": {
+    "photoUrl": "URL фото",
+    "name": "Имя",
+    "title": "Заголовок",
+    "location": "Локация",
+    "age": "Возраст",
+    "contactPhone": "Телефон",
+    "contactEmail": "Email",
+    "contactWhatsApp": "WhatsApp",
+    "contactTelegram": "Telegram",
+    "contactWebsite": "Сайт",
+    "professionalProfile": "Кто вы, чем занимаетесь, ваш опыт и специализация.",
+    "expertise": "Какие задачи решаете и для кого.",
+    "casesAndResults": "Конкретные результаты клиентов и проектов.",
+    "experienceAndAchievements": "Цифры, компании, публикации, награды, выступления.",
+    "collaborationFormats": "Консультации, аудит, сопровождение, менторство.",
+    "weekday": "День",
+    "startTime": "Начало",
+    "endTime": "Конец",
+    "price": "Стоимость",
+    "date": "Дата",
+    "note": "Заметка",
+    "visitorName": "Имя",
+    "visitorEmail": "Email",
+    "visitorPhone": "Телефон",
+    "requestDescription": "Что вам нужно?"
+  },
+  "Booking": {
+    "title": "Запросить консультацию",
+    "selected": "Выбранный слот",
+    "submitted": "Заявка отправлена"
+  }
+}

@@ -1,0 +1,14 @@
+.next
+.next-e2e
+coverage
+node_modules
+playwright-report
+test-results
+*.db
+*.db-journal
+.env.local
+.env*.local
+.env
+next-env.d.ts
+*.tsbuildinfo
+prisma/schema.generated.prisma

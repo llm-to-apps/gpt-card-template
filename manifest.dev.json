@@ -1,0 +1,82 @@
+{
+  "$schema": "../manifest.schema.json",
+  "schemaVersion": 1,
+  "id": "gpt-card-dev",
+  "slug": "gpt-card-dev",
+  "name": "GPT Card (dev)",
+  "description": "Personal website card with consultation booking, using the local dev image.",
+  "icon": "id-card",
+  "status": "available",
+  "sortOrder": 21,
+  "source": {
+    "repository": "gpt-card-template-dev",
+    "remote": "git@github.com:llm-to-apps/gpt-card-template.git",
+    "path": "templates/gpt-card-template"
+  },
+  "updates": {
+    "github": {
+      "repository": "llm-to-apps/gpt-card-template",
+      "ref": "main",
+      "path": "manifest.dev.json"
+    }
+  },
+  "git": {
+    "mount": {
+      "target": "/workspace",
+      "strategy": "clone",
+      "defaultBranch": "main",
+      "preserve": ["node_modules", ".next"]
+    }
+  },
+  "image": "os7-gpt-card:dev",
+  "runtime": {
+    "workdir": "/workspace",
+    "appPort": 80,
+    "devPort": 4047,
+    "agentPort": 7070,
+    "restoreCommand": "npm ci",
+    "startupCommands": "npm run prisma:generate && npm run db:deploy && npm run db:seed"
+  },
+  "resources": {
+    "memory": {
+      "reservationMb": 256,
+      "limitMb": 2048
+    },
+    "cpu": {
+      "reservation": 0.05,
+      "limit": 1
+    }
+  },
+  "services": {
+    "mysql": {
+      "required": true,
+      "database": "project"
+    },
+    "oauth": {
+      "required": true
+    }
+  },
+  "env": {
+    "template": {
+      "NODE_ENV": "development",
+      "NEXT_TELEMETRY_DISABLED": "1",
+      "PROJECT_ID": "{{app.projectId}}",
+      "MYSQL_HOST": "mysql",
+      "MYSQL_PORT": "3306",
+      "MYSQL_DATABASE": "{{services.mysql.database}}",
+      "MYSQL_USER": "{{services.mysql.user}}",
+      "MYSQL_PASSWORD": "{{services.mysql.password}}",
+      "DATABASE_URL": "mysql://{{services.mysql.user}}:{{services.mysql.password}}@mysql:3306/{{services.mysql.database}}",
+      "OAUTH_CLIENT_ID": "{{services.oauth.clientId}}",
+      "OAUTH_CLIENT_SECRET": "{{services.oauth.clientSecret}}",
+      "AUTH_SECRET": "{{services.oauth.clientSecret}}",
+      "OAUTH_ISSUER_URL": "{{services.oauth.issuerUrl}}",
+      "OAUTH_AUTHORIZE_URL": "{{services.oauth.authorizeUrl}}",
+      "OAUTH_TOKEN_URL": "{{services.oauth.tokenUrl}}",
+      "OAUTH_USERINFO_URL": "{{services.oauth.userinfoUrl}}",
+      "OAUTH_INTERNAL_TOKEN_URL": "{{services.oauth.internalTokenUrl}}",
+      "OAUTH_INTERNAL_USERINFO_URL": "{{services.oauth.internalUserinfoUrl}}",
+      "OAUTH_REQUEST_HOST": "{{services.oauth.requestHost}}"
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "App": {
+    "title": "GPT Card",
+    "subtitle": "Persönliche Website-Karte mit Beratungsslots",
+    "signIn": "Anmelden",
+    "signOut": "Abmelden",
+    "view": "Ansicht",
+    "edit": "Bearbeiten",
+    "save": "Speichern",
+    "saving": "Speichern...",
+    "previousWeek": "Zurück",
+    "nextWeek": "Weiter",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "add": "Hinzufügen",
+    "addSlot": "Slot hinzufügen",
+    "editSlot": "Slot bearbeiten",
+    "book": "Buchen",
+    "admin": "Admin",
+    "publicView": "Öffentliche Ansicht",
+    "profile": "Profil"
+  },
+  "Sections": {
+    "contacts": "Kontakte",
+    "professionalProfile": "Berufsprofil",
+    "expertise": "Expertise",
+    "casesAndResults": "Cases und Ergebnisse",
+    "experienceAndAchievements": "Erfahrung und Erfolge",
+    "collaborationFormats": "Zusammenarbeit",
+    "availability": "Verfügbarkeit",
+    "excludedDates": "Ausgeschlossene Daten",
+    "requests": "Anfragen"
+  },
+  "Onboarding": {
+    "welcome": "Erstelle deine öffentliche Karte",
+    "teaser": "Füge Profil, Verfügbarkeit und eine Seite hinzu, über die Besucher eine Beratung anfragen können.",
+    "complete": "Onboarding abschließen",
+    "continue": "Einrichtung fortsetzen"
+  },
+  "Fields": {
+    "photoUrl": "Foto-URL",
+    "name": "Name",
+    "title": "Titel",
+    "location": "Standort",
+    "age": "Alter",
+    "contactPhone": "Telefon",
+    "contactEmail": "E-Mail",
+    "contactWhatsApp": "WhatsApp",
+    "contactTelegram": "Telegram",
+    "contactWebsite": "Website",
+    "professionalProfile": "Wer du bist, was du machst, Erfahrung und Spezialisierung.",
+    "expertise": "Welche Aufgaben du löst und für wen.",
+    "casesAndResults": "Konkrete Ergebnisse aus Kunden und Projekten.",
+    "experienceAndAchievements": "Zahlen, Firmen, Veröffentlichungen, Auszeichnungen, Vorträge.",
+    "collaborationFormats": "Beratung, Audits, Begleitung, Mentoring.",
+    "weekday": "Tag",
+    "startTime": "Start",
+    "endTime": "Ende",
+    "price": "Preis",
+    "date": "Datum",
+    "note": "Notiz",
+    "visitorName": "Name",
+    "visitorEmail": "E-Mail",
+    "visitorPhone": "Telefon",
+    "requestDescription": "Was brauchst du?"
+  },
+  "Booking": {
+    "title": "Beratung anfragen",
+    "selected": "Ausgewählter Slot",
+    "submitted": "Anfrage gesendet"
+  }
+}

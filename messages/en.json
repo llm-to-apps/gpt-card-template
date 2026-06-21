@@ -1,0 +1,72 @@
+{
+  "App": {
+    "title": "GPT Card",
+    "subtitle": "Personal website card with booking slots",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "view": "View",
+    "edit": "Edit",
+    "save": "Save",
+    "saving": "Saving...",
+    "previousWeek": "Previous",
+    "nextWeek": "Next",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "add": "Add",
+    "addSlot": "Add slot",
+    "editSlot": "Edit slot",
+    "book": "Book",
+    "admin": "Admin",
+    "publicView": "Public view",
+    "profile": "Profile"
+  },
+  "Sections": {
+    "contacts": "Contacts",
+    "professionalProfile": "Professional profile",
+    "expertise": "Expertise",
+    "casesAndResults": "Cases and results",
+    "experienceAndAchievements": "Experience and achievements",
+    "collaborationFormats": "Collaboration formats",
+    "availability": "Availability",
+    "excludedDates": "Excluded dates",
+    "requests": "Requests"
+  },
+  "Onboarding": {
+    "welcome": "Create your public card",
+    "teaser": "Add your profile, availability, and publish a page visitors can use to request a consultation.",
+    "complete": "Finish onboarding",
+    "continue": "Continue setup"
+  },
+  "Fields": {
+    "photoUrl": "Photo URL",
+    "name": "Name",
+    "title": "Title",
+    "location": "Location",
+    "age": "Age",
+    "contactPhone": "Phone",
+    "contactEmail": "Email",
+    "contactWhatsApp": "WhatsApp",
+    "contactTelegram": "Telegram",
+    "contactWebsite": "Website",
+    "professionalProfile": "Who you are, what you do, your experience and specialization.",
+    "expertise": "What tasks you solve and for whom.",
+    "casesAndResults": "Specific results from clients and projects.",
+    "experienceAndAchievements": "Numbers, companies, publications, awards, talks.",
+    "collaborationFormats": "Consultations, audits, support, mentoring.",
+    "weekday": "Day",
+    "startTime": "Start",
+    "endTime": "End",
+    "price": "Price",
+    "date": "Date",
+    "note": "Note",
+    "visitorName": "Name",
+    "visitorEmail": "Email",
+    "visitorPhone": "Phone",
+    "requestDescription": "What do you need?"
+  },
+  "Booking": {
+    "title": "Request a consultation",
+    "selected": "Selected slot",
+    "submitted": "Request sent"
+  }
+}
