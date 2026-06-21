@@ -3,7 +3,22 @@ import { NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
-  return NextResponse.json(openApiSchema(new URL(request.url).origin));
+  return NextResponse.json(openApiSchema(publicOrigin(request)));
+}
+
+function publicOrigin(request: Request) {
+  const forwardedHost = request.headers.get('x-forwarded-host');
+  const forwardedProto = request.headers.get('x-forwarded-proto') ?? 'https';
+
+  if (forwardedHost) {
+    return `${forwardedProto}://${forwardedHost}`;
+  }
+
+  const url = new URL(request.url);
+  const host = request.headers.get('host') ?? url.host;
+  const protocol = url.protocol.replace(':', '');
+
+  return `${protocol}://${host}`;
 }
 
 function openApiSchema(origin: string) {
