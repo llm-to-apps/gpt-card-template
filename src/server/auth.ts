@@ -21,6 +21,7 @@ import { AppError } from '@/shared/result';
 
 const sessionCookie = 'gpt_card_session';
 const oauthStateCookie = 'gpt_card_oauth_state';
+const oauthNextCookie = 'gpt_card_oauth_next';
 const loggedOutCookie = 'gpt_card_logged_out';
 const localAdminCookie = 'gpt_card_local_admin';
 const sessionTtlSeconds = 60 * 60 * 24 * 30;
@@ -39,10 +40,7 @@ type OAuthUserInfo = {
   role?: string | null;
 };
 
-export async function createLoginRedirectUrl(
-  origin: string,
-  promptNone = true
-) {
+export async function createOAuthRequest(origin: string) {
   const state = createSignedOAuthState();
   const redirectUri = oauthRedirectUri(origin);
   const cookieStore = await cookies();
@@ -55,12 +53,27 @@ export async function createLoginRedirectUrl(
     path: '/'
   });
 
+  return {
+    clientId: oauthClientId(),
+    parentOrigin: oauthIssuerOrigin(),
+    redirectUri,
+    scope: 'openid email profile',
+    state
+  };
+}
+
+export async function createLoginRedirectUrl(
+  origin: string,
+  promptNone = true
+) {
+  const oauthRequest = await createOAuthRequest(origin);
+
   const url = new URL(oauthAuthorizeUrl());
   url.searchParams.set('response_type', 'code');
-  url.searchParams.set('client_id', oauthClientId());
-  url.searchParams.set('redirect_uri', redirectUri);
-  url.searchParams.set('scope', 'openid email profile');
-  url.searchParams.set('state', state);
+  url.searchParams.set('client_id', oauthRequest.clientId);
+  url.searchParams.set('redirect_uri', oauthRequest.redirectUri);
+  url.searchParams.set('scope', oauthRequest.scope);
+  url.searchParams.set('state', oauthRequest.state);
 
   if (promptNone) {
     url.searchParams.set('prompt', 'none');
@@ -173,6 +186,27 @@ export async function clearSession() {
 export async function clearManualLogout() {
   const cookieStore = await cookies();
   cookieStore.delete(loggedOutCookie);
+}
+
+export async function rememberOAuthNextPath(nextPath: string) {
+  const cookieStore = await cookies();
+
+  cookieStore.set(oauthNextCookie, nextPath, {
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+    maxAge: 10 * 60,
+    path: '/'
+  });
+}
+
+export async function consumeOAuthNextPath() {
+  const cookieStore = await cookies();
+  const nextPath = safeNextPath(cookieStore.get(oauthNextCookie)?.value);
+
+  cookieStore.delete(oauthNextCookie);
+
+  return nextPath;
 }
 
 export async function createLocalAdminSession() {
@@ -298,12 +332,20 @@ function oauthRedirectUri(origin: string) {
   return `${origin}/api/auth/callback/os7`;
 }
 
+function safeNextPath(value: string | undefined) {
+  if (!value?.startsWith('/') || value.startsWith('//')) {
+    return '/';
+  }
+
+  return value;
+}
+
 async function exchangeCodeForAccessToken(code: string, origin: string) {
   const response = await fetch(oauthInternalTokenUrl(), {
     method: 'POST',
     headers: {
       'content-type': 'application/x-www-form-urlencoded',
-      ...(os7RequestHostHeader() ? { host: os7RequestHostHeader() } : {})
+      ...os7RequestHostHeader()
     },
     body: new URLSearchParams({
       grant_type: 'authorization_code',
@@ -335,7 +377,7 @@ async function fetchUserInfo(accessToken: string): Promise<OAuthUserInfo> {
   const response = await fetch(oauthInternalUserinfoUrl(), {
     headers: {
       authorization: `Bearer ${accessToken}`,
-      ...(os7RequestHostHeader() ? { host: os7RequestHostHeader() } : {})
+      ...os7RequestHostHeader()
     }
   });
 

@@ -1,6 +1,7 @@
 import { getCurrentUser } from '@/server/auth';
 import { jsonErrorFromUnknown, jsonOk } from '@/server/http';
 import { getCardSnapshot } from '@/features/card/service';
+import { getActiveLocale } from '@/i18n/server';
 
 export async function GET(request: Request) {
   try {
@@ -11,10 +12,12 @@ export async function GET(request: Request) {
         ? new Date(`${weekStartParam}T00:00:00.000Z`)
         : undefined;
     const user = await getCurrentUser();
+    const locale = await getActiveLocale();
     const isAdmin = user?.role === 'admin';
     const snapshot = await getCardSnapshot({
       includeRequests: isAdmin,
       isAdmin,
+      locale,
       weekStart
     });
 

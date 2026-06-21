@@ -33,13 +33,15 @@ CREATE TABLE `CardProfile` (
     `onboardingCompletedAt` DATETIME(3) NULL,
     `photoUrl` VARCHAR(191) NULL,
     `photoStorageKey` VARCHAR(191) NULL,
-    `name` VARCHAR(191) NULL,
     `age` INTEGER NULL,
-    `professionalProfile` TEXT NULL,
-    `expertise` TEXT NULL,
-    `casesAndResults` TEXT NULL,
-    `experienceAndAchievements` TEXT NULL,
-    `collaborationFormats` TEXT NULL,
+    `contactPhone` VARCHAR(191) NULL,
+    `contactEmail` VARCHAR(191) NULL,
+    `contactWhatsApp` VARCHAR(191) NULL,
+    `contactTelegram` VARCHAR(191) NULL,
+    `contactWebsite` VARCHAR(191) NULL,
+    `currency` VARCHAR(191) NOT NULL DEFAULT 'USD',
+    `timeZone` VARCHAR(191) NOT NULL DEFAULT 'Europe/Berlin',
+    `firstDayOfWeek` INTEGER NOT NULL DEFAULT 1,
     `showAvailability` BOOLEAN NOT NULL DEFAULT true,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
@@ -50,12 +52,34 @@ CREATE TABLE `CardProfile` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `CardProfileTranslation` (
+    `id` VARCHAR(191) NOT NULL,
+    `profileId` VARCHAR(191) NOT NULL,
+    `locale` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NULL,
+    `title` VARCHAR(191) NULL,
+    `location` VARCHAR(191) NULL,
+    `professionalProfile` TEXT NULL,
+    `expertise` TEXT NULL,
+    `casesAndResults` TEXT NULL,
+    `experienceAndAchievements` TEXT NULL,
+    `collaborationFormats` TEXT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    INDEX `CardProfileTranslation_locale_idx`(`locale`),
+    UNIQUE INDEX `CardProfileTranslation_profileId_locale_key`(`profileId`, `locale`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `AvailabilitySlot` (
     `id` VARCHAR(191) NOT NULL,
     `profileId` VARCHAR(191) NOT NULL,
     `weekday` INTEGER NOT NULL,
     `startTime` VARCHAR(191) NOT NULL,
     `endTime` VARCHAR(191) NOT NULL,
+    `price` INTEGER NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -66,7 +90,7 @@ CREATE TABLE `AvailabilitySlot` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `ExcludedDate` (
+CREATE TABLE `Exception` (
     `id` VARCHAR(191) NOT NULL,
     `profileId` VARCHAR(191) NOT NULL,
     `date` DATETIME(3) NOT NULL,
@@ -74,8 +98,8 @@ CREATE TABLE `ExcludedDate` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
-    INDEX `ExcludedDate_profileId_idx`(`profileId`),
-    UNIQUE INDEX `ExcludedDate_profileId_date_key`(`profileId`, `date`),
+    INDEX `Exception_profileId_idx`(`profileId`),
+    UNIQUE INDEX `Exception_profileId_date_key`(`profileId`, `date`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -89,7 +113,7 @@ CREATE TABLE `ConsultationRequest` (
     `visitorEmail` VARCHAR(191) NOT NULL,
     `visitorPhone` VARCHAR(191) NOT NULL,
     `requestDescription` TEXT NOT NULL,
-    `status` ENUM('NEW', 'REVIEWED', 'HANDLED') NOT NULL DEFAULT 'NEW',
+    `status` ENUM('NEW', 'CONFIRMED', 'CANCELLED') NOT NULL DEFAULT 'NEW',
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -118,10 +142,14 @@ CREATE TABLE `AuditEvent` (
 ALTER TABLE `Session` ADD CONSTRAINT `Session_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `CardProfileTranslation` ADD CONSTRAINT `CardProfileTranslation_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `CardProfile`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `AvailabilitySlot` ADD CONSTRAINT `AvailabilitySlot_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `CardProfile`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ExcludedDate` ADD CONSTRAINT `ExcludedDate_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `CardProfile`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Exception` ADD CONSTRAINT `Exception_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `CardProfile`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ConsultationRequest` ADD CONSTRAINT `ConsultationRequest_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `CardProfile`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+

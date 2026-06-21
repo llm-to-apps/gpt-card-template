@@ -1,4 +1,10 @@
 {
+  "LocaleSwitcher": {
+    "label": "Language",
+    "en": "English",
+    "de": "Deutsch",
+    "ru": "Русский"
+  },
   "App": {
     "title": "GPT Card",
     "subtitle": "Personal website card with booking slots",
@@ -18,7 +24,11 @@
     "book": "Book",
     "admin": "Admin",
     "publicView": "Public view",
-    "profile": "Profile"
+    "profile": "Profile",
+    "editingLanguage": "You are editing the profile content for {language}.",
+    "translationFallback": "No content exists for this language yet. Fields are currently shown from {language}.",
+    "deleteTranslation": "Delete translation",
+    "footer": "Personal website card with booking slots."
   },
   "Sections": {
     "contacts": "Contacts",
@@ -28,8 +38,32 @@
     "experienceAndAchievements": "Experience and achievements",
     "collaborationFormats": "Collaboration formats",
     "availability": "Availability",
-    "excludedDates": "Excluded dates",
-    "requests": "Requests"
+    "exceptions": "Exceptions",
+    "requests": "Requests",
+    "settings": "Settings"
+  },
+  "Exceptions": {
+    "empty": "No exceptions yet"
+  },
+  "Requests": {
+    "edit": "Edit request",
+    "empty": "No requests yet",
+    "contact": "Contact",
+    "slot": "Slot",
+    "status": "Status",
+    "statusNew": "New",
+    "statusConfirmed": "Confirmed",
+    "statusCancelled": "Cancelled"
+  },
+  "Settings": {
+    "publicMcpTitle": "Public MCP",
+    "publicMcpDescription": "Connect this public endpoint in any MCP-compatible agent so visitors can inspect your card and request consultation slots.",
+    "publicMcpEndpoint": "MCP endpoint",
+    "publicMcpSetup": "Add a custom MCP connector in your agent and use this URL as the server endpoint.",
+    "publicMcpNoAuth": "No authentication is required. The public MCP only exposes booking-safe tools.",
+    "publicMcpTools": "Available tools: getPublicCard, listAvailableSlots, checkSlotAvailability, createConsultationRequest.",
+    "copy": "Copy",
+    "copied": "Copied"
   },
   "Onboarding": {
     "welcome": "Create your public card",
@@ -48,6 +82,9 @@
     "contactWhatsApp": "WhatsApp",
     "contactTelegram": "Telegram",
     "contactWebsite": "Website",
+    "currency": "Currency",
+    "timeZone": "Time zone",
+    "firstDayOfWeek": "First day of week",
     "professionalProfile": "Who you are, what you do, your experience and specialization.",
     "expertise": "What tasks you solve and for whom.",
     "casesAndResults": "Specific results from clients and projects.",
@@ -67,6 +104,10 @@
   "Booking": {
     "title": "Request a consultation",
     "selected": "Selected slot",
-    "submitted": "Request sent"
+    "submitted": "Request sent",
+    "booked": "occupied",
+    "unavailable": "Unavailable",
+    "required": "Required field",
+    "invalidEmail": "Enter a valid email"
   }
 }

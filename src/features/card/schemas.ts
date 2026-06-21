@@ -11,9 +11,16 @@ const photoUrlSchema = z
   .refine(
     (value) =>
       value.startsWith('/uploads/') ||
+      value.startsWith('/api/storage/uploads/') ||
       z.string().url().safeParse(value).success,
     'Use a valid photo URL'
   );
+
+const timeZoneSchema = z
+  .string()
+  .trim()
+  .max(120)
+  .refine((value) => isValidTimeZone(value), 'Use a valid time zone');
 
 export const profileUpdateSchema = z.object({
   photoUrl: photoUrlSchema.nullable().optional(),
@@ -27,6 +34,9 @@ export const profileUpdateSchema = z.object({
   contactWhatsApp: z.string().trim().max(180).nullable().optional(),
   contactTelegram: z.string().trim().max(180).nullable().optional(),
   contactWebsite: z.string().trim().max(300).nullable().optional(),
+  currency: z.enum(['USD', 'EUR', 'GBP', 'RUB']).optional(),
+  timeZone: timeZoneSchema.optional(),
+  firstDayOfWeek: z.number().int().min(0).max(6).optional(),
   professionalProfile: z.string().trim().max(4000).optional(),
   expertise: z.string().trim().max(4000).optional(),
   casesAndResults: z.string().trim().max(4000).optional(),
@@ -64,7 +74,7 @@ export const availabilitySlotCreateSchema = availabilitySlotBaseSchema.refine(
 export const availabilitySlotUpdateSchema =
   availabilitySlotBaseSchema.partial();
 
-export const excludedDateCreateSchema = z.object({
+export const exceptionCreateSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   note: z.string().trim().max(160).nullable().optional()
 });
@@ -79,7 +89,15 @@ export const bookingCreateSchema = z.object({
 });
 
 export const requestStatusSchema = z.object({
-  status: z.enum(['NEW', 'REVIEWED', 'HANDLED'])
+  status: z.enum(['NEW', 'CONFIRMED', 'CANCELLED'])
+});
+
+export const consultationRequestUpdateSchema = z.object({
+  visitorName: z.string().trim().min(1).max(120),
+  visitorEmail: z.string().trim().email().max(180),
+  visitorPhone: z.string().trim().min(3).max(80),
+  requestDescription: z.string().trim().min(1).max(2000),
+  status: z.enum(['NEW', 'CONFIRMED', 'CANCELLED'])
 });
 
 export type ProfileUpdateInput = z.infer<typeof profileUpdateSchema>;
@@ -89,5 +107,17 @@ export type AvailabilitySlotCreateInput = z.infer<
 export type AvailabilitySlotUpdateInput = z.infer<
   typeof availabilitySlotUpdateSchema
 >;
-export type ExcludedDateCreateInput = z.infer<typeof excludedDateCreateSchema>;
+export type ExceptionCreateInput = z.infer<typeof exceptionCreateSchema>;
 export type BookingCreateInput = z.infer<typeof bookingCreateSchema>;
+export type ConsultationRequestUpdateInput = z.infer<
+  typeof consultationRequestUpdateSchema
+>;
+
+function isValidTimeZone(value: string) {
+  try {
+    Intl.DateTimeFormat(undefined, { timeZone: value });
+    return true;
+  } catch {
+    return false;
+  }
+}

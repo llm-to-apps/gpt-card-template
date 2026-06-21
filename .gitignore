@@ -12,3 +12,4 @@ test-results
 next-env.d.ts
 *.tsbuildinfo
 prisma/schema.generated.prisma
+public/uploads/

@@ -63,7 +63,7 @@ instead of inventing a different structure.
 
 GPT Card lets a person create a personal business-card website for other people
 to visit. The app collects profile content, a photo, weekly consultation
-availability, excluded dates, and visitor consultation requests. The finished
+availability, exceptions, and visitor consultation requests. The finished
 public card must be readable by anonymous visitors.
 
 The first usable screen for an admin who has not completed setup is onboarding.
@@ -83,17 +83,17 @@ Public visitors:
 - can view available consultation slots
 - can submit a consultation request for an available slot
 - must never see admin-only controls
-- must never edit profile content, onboarding state, availability, excluded
+- must never edit profile content, onboarding state, availability, exceptions
   dates, or request management status
 
 Admin users:
 
 - authenticate through OS7 OAuth
 - must have the `admin` role for onboarding, editing, photo updates,
-  availability changes, excluded date changes, and request management
+  availability changes, exception changes, and request management
 - can edit every section of the generated website after onboarding
 - can add, update, and remove weekly consultation slots
-- can add and remove excluded dates
+- can add and remove exceptions
 
 Keep public read/booking flows and admin editing flows clearly separated in UI,
 API, and MCP code.
@@ -151,7 +151,7 @@ Persist:
 - optional experience and achievements
 - collaboration formats
 - weekly consultation availability slots
-- excluded consultation dates
+- booking exceptions
 - visitor consultation requests
 - request review/handled status when implemented
 - creation and update timestamps
@@ -188,7 +188,7 @@ Onboarding should collect:
 - optional experience and achievements
 - collaboration formats
 - weekly consultation availability
-- excluded dates when the user wants to add them during setup
+- exceptions when the user wants to add them during setup
 
 Do not turn onboarding into one large cramped form. Keep each step focused,
 mobile-friendly, and resumable.
@@ -198,14 +198,14 @@ mobile-friendly, and resumable.
 Weekly consultation availability represents recurring weekly slots, not one-off
 appointments.
 
-Excluded dates override recurring weekly availability. Examples include holidays,
+Exceptions override recurring weekly availability. Examples include holidays,
 public holidays, personal days off, travel days, or any date when the admin does
 not want bookings.
 
 Visitor booking must:
 
 - show only actually available slots
-- respect weekly availability and excluded dates
+- respect weekly availability and exceptions
 - account for already booked or unavailable slots when booking storage exists
 - open a modal after slot selection
 - collect visitor name, email, phone, and a short request description
@@ -226,7 +226,7 @@ Admin app MCP:
 - can read and update profile sections
 - can update the profile photo reference when an uploaded file is available
 - can read, add, update, and remove weekly availability slots
-- can read, add, and remove excluded dates
+- can read, add, and remove exceptions
 - can read visitor consultation requests
 - can mark consultation requests reviewed or handled when request management is
   implemented
@@ -239,7 +239,7 @@ Public booking MCP:
 - can read available consultation slots
 - can check whether a selected slot is still available
 - can create a visitor consultation request
-- cannot update profile content, weekly availability, excluded dates, onboarding
+- cannot update profile content, weekly availability, exceptions, onboarding
   state, or request management status
 
 For every MCP tool:

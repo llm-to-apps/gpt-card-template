@@ -1,6 +1,6 @@
 import { requireAdmin } from '@/server/auth';
 import { jsonErrorFromUnknown, jsonOk } from '@/server/http';
-import { deleteExcludedDate } from '@/features/card/service';
+import { deleteException } from '@/features/card/service';
 
 export async function DELETE(
   _request: Request,
@@ -9,7 +9,7 @@ export async function DELETE(
   try {
     const user = await requireAdmin();
     const { id } = await params;
-    const result = await deleteExcludedDate(id, user);
+    const result = await deleteException(id, user);
 
     return jsonOk(result);
   } catch (error) {

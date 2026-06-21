@@ -1,5 +1,7 @@
 export type PublicProfileDto = {
   id: string;
+  locale: string;
+  fallbackLocale: string | null;
   onboardingComplete: boolean;
   photoUrl: string | null;
   name: string | null;
@@ -11,6 +13,9 @@ export type PublicProfileDto = {
   contactWhatsApp: string | null;
   contactTelegram: string | null;
   contactWebsite: string | null;
+  currency: string;
+  timeZone: string;
+  firstDayOfWeek: number;
   professionalProfile: string | null;
   expertise: string | null;
   casesAndResults: string | null;
@@ -27,7 +32,7 @@ export type AvailabilitySlotDto = {
   price: number | null;
 };
 
-export type ExcludedDateDto = {
+export type ExceptionDto = {
   id: string;
   date: string;
   note: string | null;
@@ -40,6 +45,7 @@ export type AvailableBookingSlotDto = {
   endAt: string;
   label: string;
   price: number | null;
+  booked: boolean;
 };
 
 export type ConsultationRequestDto = {
@@ -50,14 +56,14 @@ export type ConsultationRequestDto = {
   visitorEmail: string;
   visitorPhone: string;
   requestDescription: string;
-  status: 'NEW' | 'REVIEWED' | 'HANDLED';
+  status: 'NEW' | 'CONFIRMED' | 'CANCELLED';
   createdAt: string;
 };
 
 export type CardSnapshotDto = {
   profile: PublicProfileDto;
   availabilitySlots: AvailabilitySlotDto[];
-  excludedDates: ExcludedDateDto[];
+  exceptions: ExceptionDto[];
   availableBookingSlots: AvailableBookingSlotDto[];
   consultationRequests?: ConsultationRequestDto[];
   isAdmin: boolean;

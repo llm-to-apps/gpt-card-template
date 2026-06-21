@@ -1,9 +1,7 @@
-import { RequestStatus } from '@prisma/client';
-
 import { requireAdmin } from '@/server/auth';
 import { jsonErrorFromUnknown, jsonOk } from '@/server/http';
-import { requestStatusSchema } from '@/features/card/schemas';
-import { updateConsultationRequestStatus } from '@/features/card/service';
+import { consultationRequestUpdateSchema } from '@/features/card/schemas';
+import { updateConsultationRequest } from '@/features/card/service';
 
 export async function PATCH(
   request: Request,
@@ -12,12 +10,8 @@ export async function PATCH(
   try {
     const user = await requireAdmin();
     const { id } = await params;
-    const input = requestStatusSchema.parse(await request.json());
-    const result = await updateConsultationRequestStatus(
-      id,
-      input.status as RequestStatus,
-      user
-    );
+    const input = consultationRequestUpdateSchema.parse(await request.json());
+    const result = await updateConsultationRequest(id, input, user);
 
     return jsonOk(result);
   } catch (error) {

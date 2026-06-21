@@ -54,6 +54,9 @@
     },
     "oauth": {
       "required": true
+    },
+    "storage": {
+      "required": true
     }
   },
   "env": {
@@ -61,6 +64,7 @@
       "NODE_ENV": "development",
       "NEXT_TELEMETRY_DISABLED": "1",
       "PROJECT_ID": "{{app.projectId}}",
+      "GPT_CARD_STORAGE_BACKEND": "s3",
       "MYSQL_HOST": "mysql",
       "MYSQL_PORT": "3306",
       "MYSQL_DATABASE": "{{services.mysql.database}}",
@@ -76,7 +80,16 @@
       "OAUTH_USERINFO_URL": "{{services.oauth.userinfoUrl}}",
       "OAUTH_INTERNAL_TOKEN_URL": "{{services.oauth.internalTokenUrl}}",
       "OAUTH_INTERNAL_USERINFO_URL": "{{services.oauth.internalUserinfoUrl}}",
-      "OAUTH_REQUEST_HOST": "{{services.oauth.requestHost}}"
+      "OS7_PROJECT_TOKEN_INTROSPECTION_URL": "{{services.oauth.internalProjectUserTokenIntrospectionUrl}}",
+      "PROJECT_SERVICE_API_TOKEN": "{{services.oauth.projectServiceApiToken}}",
+      "PROJECT_SERVICE_API_BASE_URI": "{{services.oauth.projectServiceApiBaseUri}}",
+      "OAUTH_REQUEST_HOST": "{{services.oauth.requestHost}}",
+      "S3_ENDPOINT": "{{services.storage.internalEndpoint}}",
+      "S3_REGION": "{{services.storage.region}}",
+      "S3_ACCESS_KEY_ID": "{{services.storage.accessKeyId}}",
+      "S3_SECRET_ACCESS_KEY": "{{services.storage.secretAccessKey}}",
+      "S3_BUCKET": "{{services.storage.bucket}}",
+      "S3_FORCE_PATH_STYLE": "{{services.storage.forcePathStyle}}"
     }
   }
 }

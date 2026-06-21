@@ -187,8 +187,11 @@ export const os7Theme = createTheme({
     }),
     Tabs: Tabs.extend({
       styles: {
+        tab: {
+          fontSize: 'var(--mantine-font-size-md)'
+        },
         tabLabel: {
-          fontSize: 'inherit'
+          fontSize: 'var(--mantine-font-size-md)'
         }
       }
     }),

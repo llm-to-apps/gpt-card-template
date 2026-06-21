@@ -1,4 +1,10 @@
 {
+  "LocaleSwitcher": {
+    "label": "Sprache",
+    "en": "English",
+    "de": "Deutsch",
+    "ru": "Русский"
+  },
   "App": {
     "title": "GPT Card",
     "subtitle": "Persönliche Website-Karte mit Beratungsslots",
@@ -18,7 +24,11 @@
     "book": "Buchen",
     "admin": "Admin",
     "publicView": "Öffentliche Ansicht",
-    "profile": "Profil"
+    "profile": "Profil",
+    "editingLanguage": "Du bearbeitest den Profilinhalt für {language}.",
+    "translationFallback": "Für diese Sprache gibt es noch keinen Inhalt. Die Felder werden aktuell aus {language} angezeigt.",
+    "deleteTranslation": "Übersetzung löschen",
+    "footer": "Persönliche Website-Karte mit Beratungsslots."
   },
   "Sections": {
     "contacts": "Kontakte",
@@ -28,8 +38,32 @@
     "experienceAndAchievements": "Erfahrung und Erfolge",
     "collaborationFormats": "Zusammenarbeit",
     "availability": "Verfügbarkeit",
-    "excludedDates": "Ausgeschlossene Daten",
-    "requests": "Anfragen"
+    "exceptions": "Ausnahmen",
+    "requests": "Anfragen",
+    "settings": "Einstellungen"
+  },
+  "Exceptions": {
+    "empty": "Noch keine Ausnahmen"
+  },
+  "Requests": {
+    "edit": "Anfrage bearbeiten",
+    "empty": "Noch keine Anfragen",
+    "contact": "Kontakt",
+    "slot": "Slot",
+    "status": "Status",
+    "statusNew": "Neu",
+    "statusConfirmed": "Bestätigt",
+    "statusCancelled": "Storniert"
+  },
+  "Settings": {
+    "publicMcpTitle": "Public MCP",
+    "publicMcpDescription": "Verbinde diesen öffentlichen Endpoint in jedem MCP-kompatiblen Agenten, damit Besucher deine Karte sehen und Beratungsslots anfragen können.",
+    "publicMcpEndpoint": "MCP Endpoint",
+    "publicMcpSetup": "Füge im Agenten einen custom MCP connector hinzu und nutze diese URL als Server-Endpoint.",
+    "publicMcpNoAuth": "Keine Authentifizierung erforderlich. Das öffentliche MCP stellt nur booking-sichere Tools bereit.",
+    "publicMcpTools": "Verfügbare Tools: getPublicCard, listAvailableSlots, checkSlotAvailability, createConsultationRequest.",
+    "copy": "Kopieren",
+    "copied": "Kopiert"
   },
   "Onboarding": {
     "welcome": "Erstelle deine öffentliche Karte",
@@ -48,6 +82,9 @@
     "contactWhatsApp": "WhatsApp",
     "contactTelegram": "Telegram",
     "contactWebsite": "Website",
+    "currency": "Währung",
+    "timeZone": "Zeitzone",
+    "firstDayOfWeek": "Erster Wochentag",
     "professionalProfile": "Wer du bist, was du machst, Erfahrung und Spezialisierung.",
     "expertise": "Welche Aufgaben du löst und für wen.",
     "casesAndResults": "Konkrete Ergebnisse aus Kunden und Projekten.",
@@ -67,6 +104,10 @@
   "Booking": {
     "title": "Beratung anfragen",
     "selected": "Ausgewählter Slot",
-    "submitted": "Anfrage gesendet"
+    "submitted": "Anfrage gesendet",
+    "booked": "besetzt",
+    "unavailable": "Nicht verfügbar",
+    "required": "Pflichtfeld",
+    "invalidEmail": "Gib eine gültige E-Mail ein"
   }
 }

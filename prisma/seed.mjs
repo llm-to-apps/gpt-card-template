@@ -20,6 +20,25 @@ async function main() {
       });
 
   await Promise.all(
+    ['en', 'de', 'ru'].map((locale) =>
+      prisma.cardProfileTranslation.upsert({
+        where: {
+          profileId_locale: {
+            profileId: profile.id,
+            locale
+          }
+        },
+        update: demoProfileTranslationData(locale),
+        create: {
+          profileId: profile.id,
+          locale,
+          ...demoProfileTranslationData(locale)
+        }
+      })
+    )
+  );
+
+  await Promise.all(
     [
       { weekday: 1, startTime: '09:00', endTime: '10:00', price: 150 },
       { weekday: 1, startTime: '14:00', endTime: '15:00', price: 150 },
@@ -50,10 +69,9 @@ async function main() {
   );
 
   if (
-    (await prisma.excludedDate.count({ where: { profileId: profile.id } })) ===
-    0
+    (await prisma.exception.count({ where: { profileId: profile.id } })) === 0
   ) {
-    await prisma.excludedDate.createMany({
+    await prisma.exception.createMany({
       data: [
         {
           profileId: profile.id,
@@ -99,7 +117,7 @@ async function main() {
           visitorPhone: '+1 212 555 0109',
           requestDescription:
             'Looking for a 30-minute audit of our consulting offer and conversion flow.',
-          status: 'REVIEWED'
+          status: 'CONFIRMED'
         }
       ]
     });
@@ -148,17 +166,61 @@ function demoProfileData() {
     showAvailability: true,
     photoUrl:
       'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=512&q=80',
-    name: 'Sofia Reed',
-    title: 'Product strategist for expert-led AI services',
-    location: 'San Francisco, CA',
     age: 34,
     contactPhone: '+1 415 555 0142',
     contactEmail: 'sofia.reed@example.com',
     contactWhatsApp: '+1 415 555 0142',
     contactTelegram: '@sofia_reed',
     contactWebsite: 'https://sofia-reed.example.com',
+    currency: 'USD',
+    timeZone: 'Europe/Berlin',
+    firstDayOfWeek: 1
+  };
+}
+
+function demoProfileTranslationData(locale) {
+  if (locale === 'ru') {
+    return {
+      name: 'София Рид',
+      title: 'Продуктовый стратег для экспертных AI-сервисов',
+      location: 'Сан-Франциско, CA',
+      professionalProfile:
+        'Независимый продуктовый стратег, который помогает экспертным командам превращать знания, услуги и внутренние процессы в понятные цифровые продукты. 12 лет опыта в SaaS, консалтинге и AI-enabled операциях.',
+      expertise:
+        'Я помогаю основателям, консультантам и небольшим командам уточнять оффер, проектировать клиентский опыт и внедрять практичные AI-assisted процессы, которые экономят время и не делают продукт безликим.',
+      casesAndResults:
+        'Переработала onboarding консалтингового клиента и сократила подготовку к первому звонку на 45%. Помогла B2B services-команде упаковать три внутренних процесса в платный клиентский портал. Поддержала запуск, который принес 38 квалифицированных звонков за первый месяц.',
+      experienceAndAchievements:
+        'Бывший product lead в двух venture-backed SaaS-компаниях. Спикер product operations meetups. Пишу об AI-assisted service design и системах клиентского опыта.',
+      collaborationFormats:
+        'Стратегические сессии, продуктовые аудиты, планирование запусков, mapping процессов, async advisory и месячное менторство для основателей и senior operators.'
+    };
+  }
+
+  if (locale === 'de') {
+    return {
+      name: 'Sofia Reed',
+      title: 'Produktstrategin für expertengeführte AI-Services',
+      location: 'San Francisco, CA',
+      professionalProfile:
+        'Unabhängige Produktstrategin, die expertengeführten Teams hilft, Wissen, Services und interne Workflows in klare digitale Produkte zu verwandeln. 12 Jahre Erfahrung in SaaS, Consulting und AI-gestützten Operations.',
+      expertise:
+        'Ich helfe Gründern, Beratern und Boutique-Teams, ihr Angebot zu schärfen, Kundenerlebnisse zu gestalten und praktische AI-gestützte Workflows aufzubauen, die Zeit sparen, ohne generisch zu wirken.',
+      casesAndResults:
+        'Ein Consulting-Onboarding neu gestaltet und die Vorbereitung auf Erstgespräche um 45% reduziert. Einem B2B-Services-Team geholfen, drei interne Prozesse in ein bezahltes Kundenportal zu verpacken. Einen Launch begleitet, der im ersten Monat 38 qualifizierte Gespräche erzeugte.',
+      experienceAndAchievements:
+        'Ehemalige Product Lead in zwei venture-backed SaaS-Unternehmen. Speakerin bei Product-Operations-Meetups. Veröffentlicht Essays zu AI-assisted Service Design und Client Experience Systems.',
+      collaborationFormats:
+        'Strategie-Sessions, Produktaudits, Launch-Planung, Workflow-Mapping, async Advisory und monatliches Mentoring für Gründer oder Senior Operators.'
+    };
+  }
+
+  return {
     professionalProfile:
       'Independent product strategist helping expert-led teams turn knowledge, services, and internal workflows into clear digital products. 12 years across SaaS, consulting, and AI-enabled operations.',
+    name: 'Sofia Reed',
+    title: 'Product strategist for expert-led AI services',
+    location: 'San Francisco, CA',
     expertise:
       'I help founders, consultants, and boutique teams clarify their offer, design client-facing experiences, and build practical AI-assisted workflows that save time without making the product feel generic.',
     casesAndResults:

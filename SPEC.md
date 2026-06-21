@@ -70,9 +70,9 @@ The MCP interface should support:
 - adding consultation availability slots
 - updating consultation availability slots
 - removing consultation availability slots
-- reading excluded consultation dates
-- adding excluded dates
-- removing excluded dates
+- reading booking exceptions
+- adding exceptions
+- removing exceptions
 - reading visitor consultation requests
 - marking visitor consultation requests as reviewed or handled, when request management is implemented
 
@@ -106,7 +106,7 @@ The public MCP booking request should collect:
 - visitor phone
 - short request description
 
-Public MCP writes must be limited to creating consultation requests in MySQL. They must not allow updating profile content, weekly availability, excluded dates, onboarding state, or request management status.
+Public MCP writes must be limited to creating consultation requests in MySQL. They must not allow updating profile content, weekly availability, exceptions, onboarding state, or request management status.
 
 The public MCP should return structured success and validation responses that are safe to show to an anonymous visitor.
 
@@ -220,19 +220,19 @@ The interface should support:
 - editing slot start and end times
 - removing slots
 - leaving a day empty when the user is not available
-- maintaining a separate list of excluded dates when consultations should not be available
+- maintaining a separate list of exceptions when consultations should not be available
 - saving availability as part of onboarding progress
 
 The weekly schedule should represent recurring weekly availability, not one-off appointments.
 
-Excluded dates should override weekly availability. Examples include holidays, public holidays, personal days off, travel days, or any other date when the user does not want to accept bookings.
+Exceptions should override weekly availability. Examples include holidays, public holidays, personal days off, travel days, or any other date when the user does not want to accept bookings.
 
-The excluded dates interface should support:
+The exceptions interface should support:
 
 - adding a specific calendar date
 - removing a date from the exclusion list
 - optionally adding a short note or label for the exclusion
-- showing excluded dates separately from recurring weekly slots
+- showing exceptions separately from recurring weekly slots
 
 ## Data Storage
 
@@ -250,7 +250,7 @@ The database should persist:
 - optional experience and achievements text
 - collaboration formats text
 - weekly consultation availability slots
-- excluded consultation dates
+- booking exceptions
 - visitor consultation requests
 - timestamps for creation and updates
 
@@ -279,7 +279,7 @@ Anonymous visitors should be able to request a consultation from the public card
 The visitor should see a weekly calendar with available consultation slots. The calendar should respect:
 
 - recurring weekly availability
-- excluded dates
+- exceptions
 - already booked or unavailable slots, when booking storage is implemented
 
 When the visitor selects an available slot, the app should open a modal asking for:
@@ -317,8 +317,8 @@ After onboarding, the user should be able to:
 - replace the photo
 - add consultation availability slots
 - remove consultation availability slots
-- add excluded dates
-- remove excluded dates
+- add exceptions
+- remove exceptions
 - update weekly consultation availability
 - preview the public card
 - save changes

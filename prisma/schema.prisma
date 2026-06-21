@@ -19,8 +19,8 @@ enum OnboardingStep {
 
 enum RequestStatus {
   NEW
-  REVIEWED
-  HANDLED
+  CONFIRMED
+  CANCELLED
 }
 
 model User {
@@ -53,30 +53,47 @@ model CardProfile {
   onboardingCompletedAt      DateTime?
   photoUrl                   String?
   photoStorageKey            String?
-  name                       String?
-  title                      String?
-  location                   String?
   age                        Int?
   contactPhone               String?
   contactEmail               String?
   contactWhatsApp            String?
   contactTelegram            String?
   contactWebsite             String?
-  professionalProfile        String?        @db.Text
-  expertise                  String?        @db.Text
-  casesAndResults            String?        @db.Text
-  experienceAndAchievements  String?        @db.Text
-  collaborationFormats       String?        @db.Text
+  currency                   String         @default("USD")
+  timeZone                   String         @default("Europe/Berlin")
+  firstDayOfWeek             Int            @default(1)
   showAvailability           Boolean        @default(true)
   createdAt                  DateTime       @default(now())
   updatedAt                  DateTime       @updatedAt
 
+  translations      CardProfileTranslation[]
   availabilitySlots    AvailabilitySlot[]
-  excludedDates        ExcludedDate[]
+  exceptions        Exception[]
   consultationRequests ConsultationRequest[]
 
   @@index([ownerUserId])
   @@index([onboardingStep])
+}
+
+model CardProfileTranslation {
+  id                         String   @id @default(cuid())
+  profileId                  String
+  locale                     String
+  name                       String?
+  title                      String?
+  location                   String?
+  professionalProfile        String?  @db.Text
+  expertise                  String?  @db.Text
+  casesAndResults            String?  @db.Text
+  experienceAndAchievements  String?  @db.Text
+  collaborationFormats       String?  @db.Text
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @updatedAt
+
+  profile CardProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, locale])
+  @@index([locale])
 }
 
 model AvailabilitySlot {
@@ -96,7 +113,7 @@ model AvailabilitySlot {
   @@unique([profileId, weekday, startTime, endTime])
 }
 
-model ExcludedDate {
+model Exception {
   id        String      @id @default(cuid())
   profileId String
   date      DateTime

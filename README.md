@@ -8,7 +8,7 @@ It includes:
 - profile photo upload
 - editable profile sections
 - recurring weekly consultation availability
-- excluded dates
+- exceptions
 - anonymous public booking requests
 - admin-only editing through OS7 OAuth
 - admin MCP for project subagents

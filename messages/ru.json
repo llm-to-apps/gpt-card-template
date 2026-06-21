@@ -1,4 +1,10 @@
 {
+  "LocaleSwitcher": {
+    "label": "Язык",
+    "en": "English",
+    "de": "Deutsch",
+    "ru": "Русский"
+  },
   "App": {
     "title": "GPT Card",
     "subtitle": "Персональный сайт-визитка со слотами для консультаций",
@@ -18,7 +24,11 @@
     "book": "Записаться",
     "admin": "Админ",
     "publicView": "Публичный вид",
-    "profile": "Профиль"
+    "profile": "Профиль",
+    "editingLanguage": "Вы редактируете содержимое профиля для языка: {language}.",
+    "translationFallback": "Для этого языка пока нет содержимого. Сейчас поля показаны из языка: {language}.",
+    "deleteTranslation": "Удалить перевод",
+    "footer": "Персональная визитка со слотами для консультаций."
   },
   "Sections": {
     "contacts": "Контакты",
@@ -28,8 +38,32 @@
     "experienceAndAchievements": "Опыт и достижения",
     "collaborationFormats": "Форматы сотрудничества",
     "availability": "Доступность",
-    "excludedDates": "Исключённые даты",
-    "requests": "Заявки"
+    "exceptions": "Исключения",
+    "requests": "Заявки",
+    "settings": "Настройки"
+  },
+  "Exceptions": {
+    "empty": "Исключений пока нет"
+  },
+  "Requests": {
+    "edit": "Редактировать заявку",
+    "empty": "Заявок пока нет",
+    "contact": "Контакт",
+    "slot": "Слот",
+    "status": "Статус",
+    "statusNew": "Новая",
+    "statusConfirmed": "Подтверждена",
+    "statusCancelled": "Отменена"
+  },
+  "Settings": {
+    "publicMcpTitle": "Публичный MCP",
+    "publicMcpDescription": "Подключите этот публичный endpoint в любом MCP-совместимом агенте, чтобы посетители могли посмотреть карточку и запросить слот консультации.",
+    "publicMcpEndpoint": "MCP endpoint",
+    "publicMcpSetup": "Добавьте custom MCP connector в агенте и используйте этот URL как server endpoint.",
+    "publicMcpNoAuth": "Авторизация не нужна. Публичный MCP открывает только безопасные инструменты для записи.",
+    "publicMcpTools": "Доступные tools: getPublicCard, listAvailableSlots, checkSlotAvailability, createConsultationRequest.",
+    "copy": "Скопировать",
+    "copied": "Скопировано"
   },
   "Onboarding": {
     "welcome": "Создайте публичную визитку",
@@ -48,6 +82,9 @@
     "contactWhatsApp": "WhatsApp",
     "contactTelegram": "Telegram",
     "contactWebsite": "Сайт",
+    "currency": "Валюта",
+    "timeZone": "Часовой пояс",
+    "firstDayOfWeek": "Первый день недели",
     "professionalProfile": "Кто вы, чем занимаетесь, ваш опыт и специализация.",
     "expertise": "Какие задачи решаете и для кого.",
     "casesAndResults": "Конкретные результаты клиентов и проектов.",
@@ -67,6 +104,10 @@
   "Booking": {
     "title": "Запросить консультацию",
     "selected": "Выбранный слот",
-    "submitted": "Заявка отправлена"
+    "submitted": "Заявка отправлена",
+    "booked": "занято",
+    "unavailable": "Недоступно",
+    "required": "Обязательное поле",
+    "invalidEmail": "Введите корректный email"
   }
 }

@@ -61,6 +61,7 @@
       "NODE_ENV": "development",
       "NEXT_TELEMETRY_DISABLED": "1",
       "PROJECT_ID": "{{app.projectId}}",
+      "GPT_CARD_STORAGE_BACKEND": "disk",
       "MYSQL_HOST": "mysql",
       "MYSQL_PORT": "3306",
       "MYSQL_DATABASE": "{{services.mysql.database}}",
@@ -76,6 +77,9 @@
       "OAUTH_USERINFO_URL": "{{services.oauth.userinfoUrl}}",
       "OAUTH_INTERNAL_TOKEN_URL": "{{services.oauth.internalTokenUrl}}",
       "OAUTH_INTERNAL_USERINFO_URL": "{{services.oauth.internalUserinfoUrl}}",
+      "OS7_PROJECT_TOKEN_INTROSPECTION_URL": "{{services.oauth.internalProjectUserTokenIntrospectionUrl}}",
+      "PROJECT_SERVICE_API_TOKEN": "{{services.oauth.projectServiceApiToken}}",
+      "PROJECT_SERVICE_API_BASE_URI": "{{services.oauth.projectServiceApiBaseUri}}",
       "OAUTH_REQUEST_HOST": "{{services.oauth.requestHost}}"
     }
   }

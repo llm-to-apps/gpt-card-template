@@ -1,5 +1,7 @@
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 import '@mantine/notifications/styles.css';
+import 'mantine-datatable/styles.css';
 import './globals.css';
 
 import type { Metadata } from 'next';
@@ -10,7 +12,11 @@ import { AppMantineProvider } from './mantine-provider';
 
 export const metadata: Metadata = {
   title: 'GPT Card',
-  description: 'Personal website card with consultation booking.'
+  description: 'Personal website card with consultation booking.',
+  icons: {
+    icon: '/favicon.svg',
+    apple: '/apple-touch-icon.png'
+  }
 };
 
 export default async function RootLayout({
