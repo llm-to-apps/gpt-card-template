@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Fragment } from 'react';
 
 import { CardApp, type CardSection } from '@/features/card/card-app';
+import type { CardMode } from '@/features/card/card-mode-toolbar';
 import { EmbeddedAuthBridge } from '@/features/card/embedded-auth-bridge';
 import { getCardSnapshot } from '@/features/card/service';
 import {
@@ -14,7 +15,7 @@ import { getActiveLocale } from '@/i18n/server';
 import { getCurrentUser } from '@/server/auth';
 
 type RenderCardPageOptions = {
-  mode?: 'view' | 'edit';
+  mode?: CardMode;
 };
 
 export async function renderCardPage(

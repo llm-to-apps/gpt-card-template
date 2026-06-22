@@ -11,12 +11,10 @@ import {
   Container,
   FileButton,
   Group,
-  Loader,
   Menu,
   Modal,
   NumberInput,
   Paper,
-  SegmentedControl,
   Select,
   SimpleGrid,
   Skeleton,
@@ -35,11 +33,11 @@ import { Os7Logo, os7Brand } from '@os7/ui-kit/os7-brand';
 import {
   CalendarClock,
   CalendarX,
+  Bot,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   Copy,
-  Eye,
   Globe,
   IdCard,
   Inbox,
@@ -47,7 +45,6 @@ import {
   Mail,
   MessageCircle,
   Phone,
-  Pencil,
   Plus,
   Send,
   Settings,
@@ -57,6 +54,7 @@ import { DataTable } from 'mantine-datatable';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { QRCodeSVG } from 'qrcode.react';
 import type { MouseEvent, ReactNode } from 'react';
 import {
   startTransition,
@@ -73,7 +71,7 @@ import type {
   ConsultationRequestDto,
   ExceptionDto
 } from './types';
-import { LocaleSwitcher } from './locale-switcher';
+import { CardModeToolbar, type CardMode } from './card-mode-toolbar';
 
 type ProfileForm = {
   photoUrl: string;
@@ -119,7 +117,6 @@ export type CardSection =
   | 'exceptions'
   | 'requests'
   | 'settings';
-type CardMode = 'view' | 'edit';
 
 const weekdays = [
   'Sunday',
@@ -437,6 +434,7 @@ function PublicCard({
   const publicMcpUrl = publicOrigin
     ? `${publicOrigin}/api/public/mcp`
     : '/api/public/mcp';
+  const runAgentUrl = publicOrigin ? `${publicOrigin}/run-agent` : '/run-agent';
   const displayProfile = editMode
     ? {
         photoUrl: form.photoUrl || null,
@@ -655,6 +653,14 @@ function PublicCard({
   async function changeMode(value: string) {
     const nextMode = value as CardMode;
     if (nextMode === mode) {
+      return;
+    }
+
+    if (nextMode === 'print') {
+      if (mode === 'edit' && hasUnsavedProfileChanges && form.name.trim()) {
+        await saveProfile({ refresh: false });
+      }
+      router.push('/print');
       return;
     }
 
@@ -880,59 +886,18 @@ function PublicCard({
 
   return (
     <Stack gap="sm">
-      <Box style={{ minHeight: 36, position: 'relative' }}>
-        {snapshot.isAdmin ? (
-          <Group justify="center">
-            <SegmentedControl
-              value={mode}
-              onChange={changeMode}
-              data={[
-                {
-                  value: 'view',
-                  label: (
-                    <Group gap={4} justify="center" wrap="nowrap">
-                      <Eye size={14} />
-                      <span>{t('view')}</span>
-                    </Group>
-                  )
-                },
-                {
-                  value: 'edit',
-                  label: (
-                    <Group gap={4} justify="center" wrap="nowrap">
-                      <Pencil size={14} />
-                      <span>{t('edit')}</span>
-                    </Group>
-                  )
-                }
-              ]}
-            />
-          </Group>
-        ) : null}
-        <Group
-          gap="xs"
-          wrap="nowrap"
-          style={{
-            position: 'absolute',
-            right: 0,
-            top: 0
-          }}
-        >
-          {snapshot.isAdmin && saving ? (
-            <Loader aria-label={t('saving')} size="sm" type="dots" />
-          ) : null}
-          {editMode ? (
-            <Badge size="sm" variant="light">
-              {snapshot.profile.locale.toUpperCase()}
-            </Badge>
-          ) : null}
-          {!localeLocked ? <LocaleSwitcher /> : null}
-        </Group>
-      </Box>
+      <CardModeToolbar
+        activeLocale={snapshot.profile.locale}
+        isAdmin={snapshot.isAdmin}
+        localeLocked={localeLocked}
+        mode={mode}
+        onModeChange={changeMode}
+        saving={saving}
+      />
 
       <Paper withBorder p={{ base: 'md', sm: 'xl' }} radius="md">
         <Stack gap="lg">
-          <Group align="flex-start" gap="md" wrap="nowrap">
+          <Group align="flex-start" gap="md" wrap="wrap">
             {editMode ? (
               <FileButton
                 onChange={uploadPhoto}
@@ -1037,6 +1002,40 @@ function PublicCard({
                 </Box>
               )}
             </Box>
+            {!editMode && displayProfile.agentChatUrl ? (
+              <>
+                <Group align="center" gap="xs" hiddenFrom="sm" mt="sm" w="100%">
+                  <Box style={{ flex: '0 0 72px' }} />
+                  <Button
+                    component="a"
+                    href="/run-agent"
+                    leftSection={<Bot size={16} />}
+                    size="md"
+                    style={{ flex: '1 1 auto', maxWidth: 220 }}
+                  >
+                    {t('agent')}
+                  </Button>
+                  <Box ml="auto">
+                    <AgentQrCode
+                      label={t('agentQr')}
+                      size={56}
+                      value={runAgentUrl}
+                    />
+                  </Box>
+                </Group>
+                <Stack align="center" gap="xs" ml="auto" visibleFrom="sm">
+                  <AgentQrCode label={t('agentQr')} value={runAgentUrl} />
+                  <Button
+                    component="a"
+                    href="/run-agent"
+                    leftSection={<Bot size={16} />}
+                    size="xs"
+                  >
+                    {t('agent')}
+                  </Button>
+                </Stack>
+              </>
+            ) : null}
           </Group>
 
           <Tabs value={currentSection}>
@@ -1628,12 +1627,13 @@ function PublicCard({
                           event.currentTarget.value.trim() || null
                         );
                       }}
-                      onChange={(event) =>
+                      onChange={(event) => {
+                        const value = event.currentTarget.value;
                         setForm((current) => ({
                           ...current,
-                          agentChatUrl: event.currentTarget.value
-                        }))
-                      }
+                          agentChatUrl: value
+                        }));
+                      }}
                     />
                   </Stack>
 
@@ -1726,6 +1726,31 @@ function PublicCard({
         <Os7Logo h={18} href={os7Brand.siteHref} target="_blank" />
       </Group>
     </Stack>
+  );
+}
+
+function AgentQrCode({
+  label,
+  size = 72,
+  value
+}: {
+  label: string;
+  size?: number;
+  value: string;
+}) {
+  return (
+    <Box
+      aria-label={label}
+      style={{
+        background: 'white',
+        border: '1px solid var(--mantine-color-gray-3)',
+        borderRadius: 8,
+        lineHeight: 0,
+        padding: 6
+      }}
+    >
+      <QRCodeSVG value={value} size={size} marginSize={0} />
+    </Box>
   );
 }
 
