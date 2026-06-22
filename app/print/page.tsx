@@ -428,7 +428,10 @@ function createProfessionalProfileLayout(value: string) {
 
   for (let fontSize = 19; fontSize >= minFontSize; fontSize -= 1) {
     const lineHeight = Math.round(fontSize * 1.35);
-    const maxCharacters = Math.max(20, Math.floor(maxWidth / (fontSize * 0.52)));
+    const maxCharacters = Math.max(
+      20,
+      Math.floor(maxWidth / (fontSize * 0.52))
+    );
     const lines = wrapSvgTextLine(compacted, maxCharacters);
 
     if (lines.length * lineHeight <= maxHeight) {
