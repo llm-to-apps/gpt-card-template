@@ -13,6 +13,7 @@ import {
 } from '@/i18n/locales';
 import { getActiveLocale } from '@/i18n/server';
 import { getCurrentUser } from '@/server/auth';
+import { publicProtocol } from '@/server/request-origin';
 
 type RenderCardPageOptions = {
   mode?: CardMode;
@@ -136,13 +137,10 @@ function addDays(date: Date, days: number) {
 
 function requestOrigin(headerStore: Headers) {
   const host = headerStore.get('x-forwarded-host') ?? headerStore.get('host');
-  const protocol =
-    headerStore.get('x-forwarded-proto') ??
-    (host?.startsWith('localhost') || host?.startsWith('127.0.0.1')
-      ? 'http'
-      : 'https');
 
-  return host ? `${protocol}://${host}` : 'http://localhost:3006';
+  return host
+    ? `${publicProtocol(host, headerStore.get('x-forwarded-proto'))}://${host}`
+    : 'http://localhost:3006';
 }
 
 function sectionPath(section: CardSection) {

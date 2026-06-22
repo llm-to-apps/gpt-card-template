@@ -9,6 +9,7 @@ import { getCardSnapshot } from '@/features/card/service';
 import { localeSearchParamHeaderName } from '@/i18n/locales';
 import { getActiveLocale } from '@/i18n/server';
 import { getCurrentUser } from '@/server/auth';
+import { publicProtocol } from '@/server/request-origin';
 
 export const metadata: Metadata = {
   title: 'Print - GPT Card'
@@ -377,13 +378,10 @@ function BackCardSvg({
 
 function requestOrigin(headerStore: Headers) {
   const host = headerStore.get('x-forwarded-host') ?? headerStore.get('host');
-  const protocol =
-    headerStore.get('x-forwarded-proto') ??
-    (host?.startsWith('localhost') || host?.startsWith('127.0.0.1')
-      ? 'http'
-      : 'https');
 
-  return host ? `${protocol}://${host}` : 'http://localhost:3006';
+  return host
+    ? `${publicProtocol(host, headerStore.get('x-forwarded-proto'))}://${host}`
+    : 'http://localhost:3006';
 }
 
 function compactSvgText(value: string, maxLength: number) {
