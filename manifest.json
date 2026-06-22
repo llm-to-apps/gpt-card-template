@@ -29,7 +29,7 @@
       "preserve": ["node_modules", ".next"]
     }
   },
-  "image": "ghcr.io/llm-to-apps/gpt-card-template:latest",
+  "image": "ghcr.io/llm-to-apps/gpt-card-template:sha-cdcd86a",
   "runtime": {
     "workdir": "/workspace",
     "appPort": 80,
