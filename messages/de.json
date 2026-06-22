@@ -114,5 +114,11 @@
     "unavailable": "Nicht verfügbar",
     "required": "Pflichtfeld",
     "invalidEmail": "Gib eine gültige E-Mail ein"
+  },
+  "RunAgent": {
+    "pageLabel": "Persönlicher Agent",
+    "missingDescription": "Der Agent-Chat-Link ist noch nicht eingerichtet.",
+    "openAgent": "Agent öffnen",
+    "backToCard": "Zurück zur Karte"
   }
 }

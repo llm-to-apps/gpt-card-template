@@ -114,5 +114,11 @@
     "unavailable": "Недоступно",
     "required": "Обязательное поле",
     "invalidEmail": "Введите корректный email"
+  },
+  "RunAgent": {
+    "pageLabel": "Персональный агент",
+    "missingDescription": "Ссылка на чат с агентом пока не настроена.",
+    "openAgent": "Открыть агента",
+    "backToCard": "Назад к визитке"
   }
 }

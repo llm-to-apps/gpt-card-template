@@ -114,5 +114,11 @@
     "unavailable": "Unavailable",
     "required": "Required field",
     "invalidEmail": "Enter a valid email"
+  },
+  "RunAgent": {
+    "pageLabel": "Personal agent",
+    "missingDescription": "The agent chat link is not configured yet.",
+    "openAgent": "Open agent",
+    "backToCard": "Back to card"
   }
 }
