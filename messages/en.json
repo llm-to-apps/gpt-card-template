@@ -25,6 +25,7 @@
     "book": "Book",
     "admin": "Admin",
     "agent": "Agent",
+    "agentBackTitle": "Meet My Personal GPT Agent",
     "agentQr": "Agent chat QR code",
     "publicView": "Public view",
     "profile": "Profile",

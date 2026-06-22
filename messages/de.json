@@ -25,6 +25,7 @@
     "book": "Buchen",
     "admin": "Admin",
     "agent": "Agent",
+    "agentBackTitle": "Mein persönlicher GPT-Agent",
     "agentQr": "QR-Code für Agent-Chat",
     "publicView": "Öffentliche Ansicht",
     "profile": "Profil",

@@ -1,5 +1,6 @@
 import { headers } from 'next/headers';
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { QRCodeSVG } from 'qrcode.react';
 
 import { CardModeToolbar } from '@/features/card/card-mode-toolbar';
@@ -26,10 +27,11 @@ const FRONT_SVG_ID = 'gpt-card-front-svg';
 const BACK_SVG_ID = 'gpt-card-back-svg';
 
 export default async function PrintPage() {
-  const [headerStore, locale, user] = await Promise.all([
+  const [headerStore, locale, user, t] = await Promise.all([
     headers(),
     getActiveLocale(),
-    getCurrentUser()
+    getCurrentUser(),
+    getTranslations('App')
   ]);
   const snapshot = await getCardSnapshot({ locale });
   const isAdmin = user?.role === 'admin';
@@ -84,7 +86,11 @@ export default async function PrintPage() {
         />
       </section>
       <section aria-label="Business card back" className="print-card">
-        <BackCardSvg qrUrl={agentQrUrl.toString()} svgId={BACK_SVG_ID} />
+        <BackCardSvg
+          agentTitle={t('agentBackTitle')}
+          qrUrl={agentQrUrl.toString()}
+          svgId={BACK_SVG_ID}
+        />
       </section>
     </main>
   );
@@ -113,6 +119,9 @@ function FrontCardSvg({
 }) {
   const titleLayout = createTitleLayout(title);
   const professionalProfileText = professionalProfile?.trim();
+  const professionalProfileLayout = professionalProfileText
+    ? createProfessionalProfileLayout(professionalProfileText)
+    : null;
   const contactLineGap = 38;
   const titleStartY = 216;
   const titleEndY =
@@ -233,24 +242,24 @@ function FrontCardSvg({
           })}
         </g>
       ) : null}
-      {professionalProfileText ? (
-        <foreignObject x="88" y="500" width="874" height="96">
-          <div
-            style={{
-              color: '#374151',
-              display: '-webkit-box',
-              fontFamily: 'Inter, Arial, sans-serif',
-              fontSize: 19,
-              lineHeight: '27px',
-              overflow: 'hidden',
-              width: '100%',
-              WebkitBoxOrient: 'vertical',
-              WebkitLineClamp: 3
-            }}
-          >
-            {professionalProfileText}
-          </div>
-        </foreignObject>
+      {professionalProfileLayout ? (
+        <text
+          x="88"
+          y="510"
+          fontFamily="Inter, Arial, sans-serif"
+          fontSize={professionalProfileLayout.fontSize}
+          fill="#374151"
+        >
+          {professionalProfileLayout.lines.map((line, index) => (
+            <tspan
+              key={`${line}-${index}`}
+              x="88"
+              dy={index === 0 ? 0 : professionalProfileLayout.lineHeight}
+            >
+              {line}
+            </tspan>
+          ))}
+        </text>
       ) : null}
       <g transform="translate(870 56)">
         <rect width="130" height="130" fill="#ffffff" />
@@ -325,7 +334,15 @@ function TelegramIcon({ x, y }: { x: number; y: number }) {
   );
 }
 
-function BackCardSvg({ qrUrl, svgId }: { qrUrl: string; svgId: string }) {
+function BackCardSvg({
+  agentTitle,
+  qrUrl,
+  svgId
+}: {
+  agentTitle: string;
+  qrUrl: string;
+  svgId: string;
+}) {
   return (
     <svg
       aria-label="GPT Card back side"
@@ -346,7 +363,7 @@ function BackCardSvg({ qrUrl, svgId }: { qrUrl: string; svgId: string }) {
         fontWeight="750"
         fill="#ffffff"
       >
-        Meet My Personal GPT Agent
+        {agentTitle}
       </text>
       <g transform="translate(405 245)">
         <rect width="240" height="240" fill="#ffffff" />
@@ -400,6 +417,36 @@ function createTitleLayout(value: string) {
     fontSize,
     lineHeight: Math.round(fontSize * 1.22),
     lines: normalizedLines
+  };
+}
+
+function createProfessionalProfileLayout(value: string) {
+  const compacted = value.replace(/\s+/g, ' ').trim();
+  const maxWidth = 874;
+  const maxHeight = 132;
+  const minFontSize = 12;
+
+  for (let fontSize = 19; fontSize >= minFontSize; fontSize -= 1) {
+    const lineHeight = Math.round(fontSize * 1.35);
+    const maxCharacters = Math.max(20, Math.floor(maxWidth / (fontSize * 0.52)));
+    const lines = wrapSvgTextLine(compacted, maxCharacters);
+
+    if (lines.length * lineHeight <= maxHeight) {
+      return { fontSize, lineHeight, lines };
+    }
+  }
+
+  const lineHeight = Math.round(minFontSize * 1.35);
+  const maxCharacters = Math.max(
+    20,
+    Math.floor(maxWidth / (minFontSize * 0.52))
+  );
+  const maxLines = Math.floor(maxHeight / lineHeight);
+
+  return {
+    fontSize: minFontSize,
+    lineHeight,
+    lines: wrapSvgTextLine(compacted, maxCharacters).slice(0, maxLines)
   };
 }
 
