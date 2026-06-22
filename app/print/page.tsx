@@ -21,11 +21,12 @@ const CARD_WIDTH = 1050;
 const CARD_HEIGHT = Math.round(CARD_WIDTH / 1.545);
 const CARD_WIDTH_CSS = `${CARD_WIDTH_IN}in`;
 const CARD_HEIGHT_CSS = `${CARD_HEIGHT_IN.toFixed(3)}in`;
-const CARD_PREVIEW_SCALE = 2;
+const CARD_PREVIEW_SCALE = 1.45;
 const CARD_PREVIEW_WIDTH_CSS = `${CARD_WIDTH_IN * CARD_PREVIEW_SCALE}in`;
 const CARD_PREVIEW_HEIGHT_CSS = `${(CARD_HEIGHT_IN * CARD_PREVIEW_SCALE).toFixed(3)}in`;
 const FRONT_SVG_ID = 'gpt-card-front-svg';
 const BACK_SVG_ID = 'gpt-card-back-svg';
+const CARD_SAFE_PADDING = 60;
 
 export default async function PrintPage() {
   const [headerStore, locale, user, t] = await Promise.all([
@@ -80,7 +81,6 @@ export default async function PrintPage() {
           location={location}
           name={name}
           photoUrl={photoUrl?.toString() ?? null}
-          professionalProfile={professionalProfile}
           qrUrl={siteQrUrl.toString()}
           svgId={FRONT_SVG_ID}
           title={title}
@@ -89,6 +89,7 @@ export default async function PrintPage() {
       <section aria-label="Business card back" className="print-card">
         <BackCardSvg
           agentTitle={t('agentBackTitle')}
+          professionalProfile={professionalProfile}
           qrUrl={agentQrUrl.toString()}
           svgId={BACK_SVG_ID}
         />
@@ -103,7 +104,6 @@ function FrontCardSvg({
   location,
   name,
   photoUrl,
-  professionalProfile,
   qrUrl,
   svgId,
   title
@@ -113,22 +113,22 @@ function FrontCardSvg({
   location?: string;
   name: string;
   photoUrl: string | null;
-  professionalProfile?: string;
   qrUrl: string;
   svgId: string;
   title: string;
 }) {
   const titleLayout = createTitleLayout(title);
-  const professionalProfileText = professionalProfile?.trim();
-  const professionalProfileLayout = professionalProfileText
-    ? createProfessionalProfileLayout(professionalProfileText)
-    : null;
-  const contactLineGap = 38;
+  const detailFontSize = titleLayout.fontSize;
+  const contactLineGap = Math.round(detailFontSize * 1.55);
   const titleStartY = 216;
   const titleEndY =
     titleStartY + (titleLayout.lines.length - 1) * titleLayout.lineHeight;
-  const locationY = titleEndY + 36;
-  const contactsY = location ? locationY + 48 : titleEndY + 52;
+  const locationY = titleEndY + 44;
+  const heroToContactsGap = 88;
+  const contactsY = location
+    ? locationY + heroToContactsGap
+    : titleEndY + heroToContactsGap;
+  const qrY = contactsY - 36;
 
   return (
     <svg
@@ -142,15 +142,15 @@ function FrontCardSvg({
     >
       <defs>
         <clipPath id="avatarClip">
-          <circle cx="170" cy="185" r="82" />
+          <circle cx="146" cy="185" r="82" />
         </clipPath>
       </defs>
       <rect width={CARD_WIDTH} height={CARD_HEIGHT} fill="#ffffff" />
-      <circle cx="170" cy="185" r="86" fill="#f1f4f8" />
+      <circle cx="146" cy="185" r="86" fill="#f1f4f8" />
       {photoUrl ? (
         <image
           href={photoUrl}
-          x="88"
+          x="64"
           y="103"
           width="164"
           height="164"
@@ -159,7 +159,7 @@ function FrontCardSvg({
         />
       ) : (
         <text
-          x="170"
+          x="146"
           y="210"
           textAnchor="middle"
           fontFamily="Inter, Arial, sans-serif"
@@ -170,18 +170,24 @@ function FrontCardSvg({
           {initial}
         </text>
       )}
+      <g transform={`translate(60 ${qrY})`}>
+        <rect width="172" height="172" fill="#ffffff" />
+        <g transform="translate(13 13)">
+          <QRCodeSVG value={qrUrl} size={146} marginSize={0} />
+        </g>
+      </g>
       <text
-        x="300"
+        x="280"
         y="162"
         fontFamily="Inter, Arial, sans-serif"
         fontSize="44"
         fontWeight="750"
         fill="#101828"
       >
-        {compactSvgText(name, 24)}
+        {compactSvgText(name, 28)}
       </text>
       <text
-        x="302"
+        x="280"
         y={titleStartY}
         fontFamily="Inter, Arial, sans-serif"
         fontSize={titleLayout.fontSize}
@@ -190,7 +196,7 @@ function FrontCardSvg({
         {titleLayout.lines.map((line, index) => (
           <tspan
             key={`${line}-${index}`}
-            x="302"
+            x="280"
             dy={index === 0 ? 0 : titleLayout.lineHeight}
           >
             {line}
@@ -199,20 +205,20 @@ function FrontCardSvg({
       </text>
       {location ? (
         <g>
-          <LocationIcon x={302} y={locationY - 20} />
+          <LocationIcon x={280} y={locationY - 26} />
           <text
-            x="332"
+            x="330"
             y={locationY}
             fontFamily="Inter, Arial, sans-serif"
-            fontSize="23"
+            fontSize={detailFontSize}
             fill="#667085"
           >
-            {compactSvgText(location, 35)}
+            {compactSvgText(location, 40)}
           </text>
         </g>
       ) : null}
       {contacts.length > 0 ? (
-        <g transform={`translate(302 ${contactsY})`}>
+        <g transform={`translate(280 ${contactsY})`}>
           {contacts.slice(0, 3).map((contact, index) => {
             const iconOffset = ['email', 'phone', 'telegram'].includes(
               contact.type
@@ -221,53 +227,29 @@ function FrontCardSvg({
             return (
               <g key={`${contact.type}-${contact.value}`}>
                 {contact.type === 'phone' ? (
-                  <PhoneIcon x={0} y={index * contactLineGap - 18} />
+                  <PhoneIcon x={0} y={index * contactLineGap - 25} />
                 ) : null}
                 {contact.type === 'email' ? (
-                  <EmailIcon x={0} y={index * contactLineGap - 17} />
+                  <EmailIcon x={0} y={index * contactLineGap - 24} />
                 ) : null}
                 {contact.type === 'telegram' ? (
-                  <TelegramIcon x={0} y={index * contactLineGap - 17} />
+                  <TelegramIcon x={0} y={index * contactLineGap - 24} />
                 ) : null}
                 <text
-                  x={iconOffset ? 30 : 0}
+                  x={iconOffset ? 50 : 0}
                   y={index * contactLineGap}
                   fontFamily="Inter, Arial, sans-serif"
-                  fontSize="21"
+                  fontSize={detailFontSize}
                   fill="#4b5563"
                 >
-                  {compactSvgText(contact.value, iconOffset ? 44 : 48)}
+                  {compactSvgText(contact.value, iconOffset ? 50 : 54)}
                 </text>
               </g>
             );
           })}
         </g>
       ) : null}
-      {professionalProfileLayout ? (
-        <text
-          x="88"
-          y="510"
-          fontFamily="Inter, Arial, sans-serif"
-          fontSize={professionalProfileLayout.fontSize}
-          fill="#374151"
-        >
-          {professionalProfileLayout.lines.map((line, index) => (
-            <tspan
-              key={`${line}-${index}`}
-              x="88"
-              dy={index === 0 ? 0 : professionalProfileLayout.lineHeight}
-            >
-              {line}
-            </tspan>
-          ))}
-        </text>
-      ) : null}
-      <g transform="translate(870 56)">
-        <rect width="130" height="130" fill="#ffffff" />
-        <g transform="translate(13 13)">
-          <QRCodeSVG value={qrUrl} size={104} marginSize={0} />
-        </g>
-      </g>
+      <PrintGuides />
     </svg>
   );
 }
@@ -275,12 +257,12 @@ function FrontCardSvg({
 function LocationIcon({ x, y }: { x: number; y: number }) {
   return (
     <g
-      transform={`translate(${x} ${y})`}
+      transform={`translate(${x} ${y}) scale(1.3)`}
       fill="none"
       stroke="#667085"
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth="2.4"
+      strokeWidth="2.7"
     >
       <path d="M10 21s7-6.6 7-12a7 7 0 0 0-14 0c0 5.4 7 12 7 12Z" />
       <circle cx="10" cy="9" r="2.4" />
@@ -291,12 +273,12 @@ function LocationIcon({ x, y }: { x: number; y: number }) {
 function PhoneIcon({ x, y }: { x: number; y: number }) {
   return (
     <g
-      transform={`translate(${x} ${y})`}
+      transform={`translate(${x} ${y}) scale(1.3)`}
       fill="none"
       stroke="#4b5563"
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth="2.4"
+      strokeWidth="2.7"
     >
       <path d="M7.5 4.5 10 10l-2.2 1.7c1.5 3 3.8 5.3 6.8 6.8L16.3 16l5.2 2.4c.6.3.9.9.7 1.5-.5 1.8-2.1 3.1-4 3.1C9 23 1 15 1 5.8c0-1.9 1.3-3.5 3.1-4 .6-.2 1.2.1 1.5.7Z" />
     </g>
@@ -306,12 +288,12 @@ function PhoneIcon({ x, y }: { x: number; y: number }) {
 function EmailIcon({ x, y }: { x: number; y: number }) {
   return (
     <g
-      transform={`translate(${x} ${y})`}
+      transform={`translate(${x} ${y}) scale(1.3)`}
       fill="none"
       stroke="#4b5563"
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth="2.4"
+      strokeWidth="2.7"
     >
       <rect x="2" y="5" width="22" height="16" rx="2" />
       <path d="m3 7 10 8 10-8" />
@@ -322,12 +304,12 @@ function EmailIcon({ x, y }: { x: number; y: number }) {
 function TelegramIcon({ x, y }: { x: number; y: number }) {
   return (
     <g
-      transform={`translate(${x} ${y})`}
+      transform={`translate(${x} ${y}) scale(1.3)`}
       fill="none"
       stroke="#4b5563"
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth="2.4"
+      strokeWidth="2.7"
     >
       <path d="M22 3 2.7 10.6c-1 .4-1 1.8.1 2.1l4.9 1.5 1.9 5.8c.3.9 1.5 1.1 2.1.4l2.7-3.1 5 3.7c.8.6 1.9.1 2.1-.9L24 4.4c.2-1-.8-1.8-2-1.4Z" />
       <path d="m8 14 11-7-8.5 9.7" />
@@ -337,13 +319,20 @@ function TelegramIcon({ x, y }: { x: number; y: number }) {
 
 function BackCardSvg({
   agentTitle,
+  professionalProfile,
   qrUrl,
   svgId
 }: {
   agentTitle: string;
+  professionalProfile?: string;
   qrUrl: string;
   svgId: string;
 }) {
+  const professionalProfileText = professionalProfile?.trim();
+  const professionalProfileLayout = professionalProfileText
+    ? createProfessionalProfileLayout(professionalProfileText, 710, 340, 40)
+    : null;
+
   return (
     <svg
       aria-label="GPT Card back side"
@@ -355,9 +344,15 @@ function BackCardSvg({
       xmlns="http://www.w3.org/2000/svg"
     >
       <rect width={CARD_WIDTH} height={CARD_HEIGHT} fill="#111827" />
+      <g transform="translate(60 236)">
+        <rect width="172" height="172" fill="#ffffff" />
+        <g transform="translate(13 13)">
+          <QRCodeSVG value={qrUrl} size={146} marginSize={0} />
+        </g>
+      </g>
       <text
         x="525"
-        y="190"
+        y="160"
         textAnchor="middle"
         fontFamily="Inter, Arial, sans-serif"
         fontSize="42"
@@ -366,13 +361,59 @@ function BackCardSvg({
       >
         {agentTitle}
       </text>
-      <g transform="translate(405 245)">
-        <rect width="240" height="240" fill="#ffffff" />
-        <g transform="translate(24 24)">
-          <QRCodeSVG value={qrUrl} size={192} marginSize={0} />
-        </g>
-      </g>
+      {professionalProfileLayout ? (
+        <text
+          x="280"
+          y="260"
+          fontFamily="Inter, Arial, sans-serif"
+          fontSize={professionalProfileLayout.fontSize}
+          fill="#e5e7eb"
+        >
+          {professionalProfileLayout.lines.map((line, index) => (
+            <tspan
+              key={`${line}-${index}`}
+              x="280"
+              dy={index === 0 ? 0 : professionalProfileLayout.lineHeight}
+            >
+              {line}
+            </tspan>
+          ))}
+        </text>
+      ) : null}
+      <PrintGuides />
     </svg>
+  );
+}
+
+function PrintGuides() {
+  return (
+    <g
+      aria-hidden="true"
+      className="print-guide"
+      fill="none"
+      pointerEvents="none"
+      strokeLinecap="square"
+      vectorEffect="non-scaling-stroke"
+    >
+      <rect
+        x="1"
+        y="1"
+        width={CARD_WIDTH - 2}
+        height={CARD_HEIGHT - 2}
+        stroke="#ef4444"
+        strokeDasharray="12 10"
+        strokeWidth="2"
+      />
+      <rect
+        x={CARD_SAFE_PADDING}
+        y={CARD_SAFE_PADDING}
+        width={CARD_WIDTH - CARD_SAFE_PADDING * 2}
+        height={CARD_HEIGHT - CARD_SAFE_PADDING * 2}
+        stroke="#2563eb"
+        strokeDasharray="8 12"
+        strokeWidth="2"
+      />
+    </g>
   );
 }
 
@@ -397,35 +438,38 @@ function compactSvgText(value: string, maxLength: number) {
 function createTitleLayout(value: string) {
   const lines = value
     .split(/\r?\n/)
-    .flatMap((line) => wrapSvgTextLine(line, 44))
+    .flatMap((line) => wrapSvgTextLine(line, 36))
     .filter(Boolean);
   const normalizedLines = lines.length > 0 ? lines : ['Personal expert card'];
   const longestLine = normalizedLines.reduce(
     (longest, line) => Math.max(longest, line.length),
     1
   );
-  const widthLimitedFont = Math.floor(560 / (longestLine * 0.56));
-  const heightLimitedFont = Math.floor(122 / (normalizedLines.length * 1.22));
+  const widthLimitedFont = Math.floor(620 / (longestLine * 0.54));
+  const heightLimitedFont = Math.floor(160 / (normalizedLines.length * 1.2));
   const fontSize = Math.max(
-    10,
-    Math.min(28, widthLimitedFont, heightLimitedFont)
+    18,
+    Math.min(34, widthLimitedFont, heightLimitedFont)
   );
 
   return {
     fontSize,
-    lineHeight: Math.round(fontSize * 1.22),
+    lineHeight: Math.round(fontSize * 1.2),
     lines: normalizedLines
   };
 }
 
-function createProfessionalProfileLayout(value: string) {
+function createProfessionalProfileLayout(
+  value: string,
+  maxWidth = 922,
+  maxHeight = 108,
+  maxFontSize = 31
+) {
   const compacted = value.replace(/\s+/g, ' ').trim();
-  const maxWidth = 874;
-  const maxHeight = 132;
-  const minFontSize = 12;
+  const minFontSize = 20;
 
-  for (let fontSize = 19; fontSize >= minFontSize; fontSize -= 1) {
-    const lineHeight = Math.round(fontSize * 1.35);
+  for (let fontSize = maxFontSize; fontSize >= minFontSize; fontSize -= 1) {
+    const lineHeight = Math.round(fontSize * 1.3);
     const maxCharacters = Math.max(
       20,
       Math.floor(maxWidth / (fontSize * 0.52))
@@ -494,10 +538,10 @@ const printStyles = `
   }
 
   .print-card {
+    aspect-ratio: ${CARD_WIDTH} / ${CARD_HEIGHT};
     background: white;
-    height: ${CARD_PREVIEW_HEIGHT_CSS};
     line-height: 0;
-    width: ${CARD_PREVIEW_WIDTH_CSS};
+    width: min(${CARD_PREVIEW_WIDTH_CSS}, 100%);
   }
 
   .print-card > svg {
@@ -527,6 +571,10 @@ const printStyles = `
     }
 
     .print-download-actions {
+      display: none;
+    }
+
+    .print-guide {
       display: none;
     }
 

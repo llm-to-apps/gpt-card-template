@@ -67,7 +67,7 @@ export function PrintDownloadActions({
         variant="light"
         onClick={() => void download('front')}
       >
-        Front PNG
+        Front
       </Button>
       <Button
         leftSection={<Download size={16} />}
@@ -75,7 +75,7 @@ export function PrintDownloadActions({
         variant="light"
         onClick={() => void download('back')}
       >
-        Back PNG
+        Back
       </Button>
     </Group>
   );
@@ -146,6 +146,7 @@ async function downloadSvgAsPng({
 }
 
 async function prepareSvgCloneForCanvas(svg: SVGSVGElement) {
+  svg.querySelectorAll('.print-guide').forEach((guide) => guide.remove());
   await inlineSvgImages(svg);
   replaceForeignObjectsWithSvgText(svg);
 }

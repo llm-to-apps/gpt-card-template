@@ -56,6 +56,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { QRCodeSVG } from 'qrcode.react';
 import type { MouseEvent, ReactNode } from 'react';
+import ReactMarkdown from 'react-markdown';
 import {
   startTransition,
   useCallback,
@@ -129,7 +130,7 @@ const weekdays = [
 ];
 
 const UI_DELAY = 300;
-const WEEKLY_CALENDAR_MIN_COLUMN_WIDTH = 188;
+const WEEKLY_CALENDAR_MIN_COLUMN_WIDTH = 120;
 const MIN_CALENDAR_SLOT_HEIGHT = 44;
 const TIMELINE_GRID_STYLE = {
   backgroundImage:
@@ -984,7 +985,7 @@ function PublicCard({
                 <Box>
                   <Title order={2}>{displayProfile.name ?? 'Your name'}</Title>
                   {displayProfile.title ? (
-                    <Text>{displayProfile.title}</Text>
+                    <MarkdownText value={displayProfile.title} compact />
                   ) : null}
                   {displayProfile.location ? (
                     <Group c="dimmed" gap={4}>
@@ -2413,9 +2414,109 @@ function EditableContentSection({
           {title}
         </Title>
       </Group>
-      <Text style={{ whiteSpace: 'pre-wrap' }}>{value}</Text>
+      <MarkdownText value={value} />
     </Box>
   );
+}
+
+function MarkdownText({
+  compact = false,
+  value
+}: {
+  compact?: boolean;
+  value: string;
+}) {
+  return (
+    <ReactMarkdown
+      allowedElements={[
+        'a',
+        'blockquote',
+        'br',
+        'code',
+        'em',
+        'li',
+        'ol',
+        'p',
+        'strong',
+        'ul'
+      ]}
+      components={{
+        a: ({ children, href }) => {
+          const safeHref = normalizeMarkdownHref(href ?? '');
+
+          if (!safeHref) {
+            return <>{children}</>;
+          }
+
+          return (
+            <Anchor href={safeHref} rel="noreferrer" target="_blank">
+              {children}
+            </Anchor>
+          );
+        },
+        blockquote: ({ children }) => (
+          <Box
+            component="blockquote"
+            m={0}
+            pl="md"
+            style={{
+              borderLeft: '3px solid var(--mantine-color-gray-4)',
+              color: 'var(--mantine-color-dimmed)'
+            }}
+          >
+            {children}
+          </Box>
+        ),
+        code: ({ children }) => (
+          <Text component="code" inherit>
+            {children}
+          </Text>
+        ),
+        li: ({ children }) => (
+          <Box component="li" mb={compact ? 0 : 4}>
+            <Text component="span">{children}</Text>
+          </Box>
+        ),
+        ol: ({ children }) => (
+          <Box
+            component="ol"
+            m={0}
+            pl="lg"
+            style={{ color: 'var(--mantine-color-text)' }}
+          >
+            {children}
+          </Box>
+        ),
+        p: ({ children }) => (
+          <Text mb={compact ? 0 : 'xs'} style={{ whiteSpace: 'pre-wrap' }}>
+            {children}
+          </Text>
+        ),
+        ul: ({ children }) => (
+          <Box
+            component="ul"
+            m={0}
+            pl="lg"
+            style={{ color: 'var(--mantine-color-text)' }}
+          >
+            {children}
+          </Box>
+        )
+      }}
+    >
+      {value}
+    </ReactMarkdown>
+  );
+}
+
+function normalizeMarkdownHref(value: string) {
+  const trimmed = value.trim();
+
+  if (/^(https?:|mailto:|tel:)/i.test(trimmed)) {
+    return trimmed;
+  }
+
+  return null;
 }
 
 function groupByWeekday<T extends { weekday: number }>(items: T[]) {
