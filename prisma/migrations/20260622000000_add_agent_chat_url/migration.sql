@@ -1,0 +1,1 @@
+ALTER TABLE `CardProfile` ADD COLUMN `agentChatUrl` VARCHAR(191) NULL;

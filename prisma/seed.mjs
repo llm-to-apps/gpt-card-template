@@ -171,6 +171,7 @@ function demoProfileData() {
     contactWhatsApp: '+1 415 555 0142',
     contactTelegram: '@sofia_reed',
     contactWebsite: 'https://sofia-reed.example.com',
+    agentChatUrl: 'https://chatgpt.com/g/g-example-sofia-reed',
     currency: 'USD',
     timeZone: 'Europe/Berlin',
     firstDayOfWeek: 1

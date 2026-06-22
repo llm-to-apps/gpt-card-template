@@ -86,6 +86,7 @@ type ProfileForm = {
   contactWhatsApp: string;
   contactTelegram: string;
   contactWebsite: string;
+  agentChatUrl: string;
   currency: string;
   timeZone: string;
   firstDayOfWeek: number;
@@ -160,6 +161,7 @@ function profileToForm(profile: CardSnapshotDto['profile']): ProfileForm {
     contactWhatsApp: profile.contactWhatsApp ?? '',
     contactTelegram: profile.contactTelegram ?? '',
     contactWebsite: profile.contactWebsite ?? '',
+    agentChatUrl: profile.agentChatUrl ?? '',
     currency: profile.currency,
     timeZone: profile.timeZone,
     firstDayOfWeek: profile.firstDayOfWeek ?? 1,
@@ -447,6 +449,7 @@ function PublicCard({
         contactWhatsApp: form.contactWhatsApp || null,
         contactTelegram: form.contactTelegram || null,
         contactWebsite: form.contactWebsite || null,
+        agentChatUrl: form.agentChatUrl || null,
         currency: form.currency,
         timeZone: form.timeZone,
         firstDayOfWeek: form.firstDayOfWeek ?? 1,
@@ -555,6 +558,7 @@ function PublicCard({
             body: {
               ...form,
               photoUrl: form.photoUrl || null,
+              agentChatUrl: form.agentChatUrl || null,
               age: form.age === '' ? null : form.age,
               onboardingStep: complete ? 'COMPLETE' : undefined
             }
@@ -617,10 +621,13 @@ function PublicCard({
   }
 
   async function changeSetting(
-    field: 'currency' | 'timeZone' | 'firstDayOfWeek',
-    value: number | string
+    field: 'currency' | 'timeZone' | 'firstDayOfWeek' | 'agentChatUrl',
+    value: number | string | null
   ) {
-    setForm((current) => ({ ...current, [field]: value }));
+    setForm((current) => ({
+      ...current,
+      [field]: field === 'agentChatUrl' ? (value ?? '') : value
+    }));
     setSaving(true);
 
     try {
@@ -1610,6 +1617,23 @@ function PublicCard({
                           void changeSetting('firstDayOfWeek', Number(value));
                         }
                       }}
+                    />
+                    <TextInput
+                      label={fields('agentChatUrl')}
+                      placeholder="https://chatgpt.com/g/..."
+                      value={form.agentChatUrl}
+                      onBlur={(event) => {
+                        void changeSetting(
+                          'agentChatUrl',
+                          event.currentTarget.value.trim() || null
+                        );
+                      }}
+                      onChange={(event) =>
+                        setForm((current) => ({
+                          ...current,
+                          agentChatUrl: event.currentTarget.value
+                        }))
+                      }
                     />
                   </Stack>
 

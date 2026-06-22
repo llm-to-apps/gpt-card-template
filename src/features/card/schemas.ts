@@ -34,6 +34,7 @@ export const profileUpdateSchema = z.object({
   contactWhatsApp: z.string().trim().max(180).nullable().optional(),
   contactTelegram: z.string().trim().max(180).nullable().optional(),
   contactWebsite: z.string().trim().max(300).nullable().optional(),
+  agentChatUrl: z.string().trim().url().max(500).nullable().optional(),
   currency: z.enum(['USD', 'EUR', 'GBP', 'RUB']).optional(),
   timeZone: timeZoneSchema.optional(),
   firstDayOfWeek: z.number().int().min(0).max(6).optional(),

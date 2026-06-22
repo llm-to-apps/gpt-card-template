@@ -110,6 +110,7 @@ export async function updateProfile(
     contactWhatsApp: input.contactWhatsApp,
     contactTelegram: input.contactTelegram,
     contactWebsite: input.contactWebsite,
+    agentChatUrl: input.agentChatUrl,
     currency: input.currency,
     timeZone: input.timeZone,
     firstDayOfWeek: input.firstDayOfWeek,
@@ -544,6 +545,7 @@ function serializeProfile(
     contactWhatsApp: string | null;
     contactTelegram: string | null;
     contactWebsite: string | null;
+    agentChatUrl: string | null;
     currency: string;
     timeZone: string;
     firstDayOfWeek: number;
@@ -569,6 +571,7 @@ function serializeProfile(
     contactWhatsApp: profile.contactWhatsApp,
     contactTelegram: profile.contactTelegram,
     contactWebsite: profile.contactWebsite,
+    agentChatUrl: profile.agentChatUrl,
     currency: profile.currency,
     timeZone: profile.timeZone,
     firstDayOfWeek: profile.firstDayOfWeek,

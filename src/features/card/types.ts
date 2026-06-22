@@ -13,6 +13,7 @@ export type PublicProfileDto = {
   contactWhatsApp: string | null;
   contactTelegram: string | null;
   contactWebsite: string | null;
+  agentChatUrl: string | null;
   currency: string;
   timeZone: string;
   firstDayOfWeek: number;

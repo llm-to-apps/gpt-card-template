@@ -163,6 +163,7 @@ function openApiSchema(origin: string) {
             casesAndResults: { type: 'string' },
             experienceAndAchievements: nullableString(),
             collaborationFormats: { type: 'string' },
+            agentChatUrl: nullableString(),
             showAvailability: { type: 'boolean' },
             contacts: {
               type: 'object',
@@ -186,6 +187,7 @@ function openApiSchema(origin: string) {
             'casesAndResults',
             'experienceAndAchievements',
             'collaborationFormats',
+            'agentChatUrl',
             'showAvailability',
             'contacts'
           ]

@@ -59,6 +59,7 @@ model CardProfile {
   contactWhatsApp            String?
   contactTelegram            String?
   contactWebsite             String?
+  agentChatUrl               String?
   currency                   String         @default("USD")
   timeZone                   String         @default("Europe/Berlin")
   firstDayOfWeek             Int            @default(1)

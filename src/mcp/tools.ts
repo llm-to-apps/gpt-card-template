@@ -288,6 +288,7 @@ function toPublicCardPayload(snapshot: CardSnapshotDto) {
       casesAndResults: profile.casesAndResults,
       experienceAndAchievements: profile.experienceAndAchievements,
       collaborationFormats: profile.collaborationFormats,
+      agentChatUrl: profile.agentChatUrl,
       showAvailability: profile.showAvailability,
       contacts: {
         phone: profile.contactPhone,
