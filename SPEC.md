@@ -26,6 +26,8 @@ The app should use the same technology stack and project conventions as the Mone
 
 Follow the same OS7 template architecture: thin route handlers, feature services, shared API/result contracts, server-only infrastructure, and MCP tools that reuse the same business service layer as UI/API actions.
 
+The development server must support OS7 external dev domains. Configure Next.js `allowedDevOrigins` to allow `127.0.0.1`, `*.localhost`, and `*.os7.dev` so `_next` dev resources, HMR, and generated CSS load correctly when the app is opened through an OS7 dev URL.
+
 ## Target User
 
 The app is for professionals who need a simple public page:
