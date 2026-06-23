@@ -56,8 +56,10 @@ export const os7Theme = createTheme({
   components: {
     ActionIcon: ActionIcon.extend({
       defaultProps: {
+        color: 'os7',
         radius: 'md',
-        size: 'lg'
+        size: 'lg',
+        variant: 'subtle'
       }
     }),
     Alert: Alert.extend({
@@ -79,8 +81,10 @@ export const os7Theme = createTheme({
     }),
     Button: Button.extend({
       defaultProps: {
+        color: 'os7',
         radius: 'md',
-        size: 'md'
+        size: 'md',
+        variant: 'filled'
       }
     }),
     Card: Card.extend({

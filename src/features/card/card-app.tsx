@@ -1005,18 +1005,25 @@ function PublicCard({
             </Box>
             {!editMode && displayProfile.agentChatUrl ? (
               <>
-                <Group align="center" gap="xs" hiddenFrom="sm" mt="sm" w="100%">
-                  <Box style={{ flex: '0 0 72px' }} />
+                <Group
+                  align="center"
+                  gap="xs"
+                  hiddenFrom="sm"
+                  justify="space-between"
+                  mt="sm"
+                  w="100%"
+                  wrap="nowrap"
+                >
                   <Button
                     component="a"
                     href="/run-agent"
                     leftSection={<Bot size={16} />}
                     size="md"
-                    style={{ flex: '1 1 auto', maxWidth: 220 }}
+                    style={{ flex: '1 1 auto' }}
                   >
                     {t('agent')}
                   </Button>
-                  <Box ml="auto">
+                  <Box style={{ flex: '0 0 auto' }}>
                     <AgentQrCode
                       label={t('agentQr')}
                       size={56}

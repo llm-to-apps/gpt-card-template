@@ -9,6 +9,22 @@
   "status": "available",
   "hot": true,
   "sortOrder": 1,
+  "agent": {
+    "routing": [
+      "personal business-card website",
+      "professional profile page",
+      "consultation booking",
+      "profile photo and biography",
+      "weekly availability and booking exceptions"
+    ],
+    "tasks": [
+      "read or update profile content",
+      "update profile photo reference",
+      "manage consultation availability",
+      "manage booking exceptions",
+      "review visitor consultation requests"
+    ]
+  },
   "source": {
     "repository": "gpt-card-template-dev",
     "remote": "git@github.com:llm-to-apps/gpt-card-template.git",
