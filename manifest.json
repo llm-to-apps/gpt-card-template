@@ -45,7 +45,7 @@
       "preserve": ["node_modules", ".next"]
     }
   },
-  "image": "ghcr.io/llm-to-apps/gpt-card-template:sha-d991e32",
+  "image": "ghcr.io/llm-to-apps/gpt-card-template:sha-7f0d45c",
   "runtime": {
     "workdir": "/workspace",
     "appPort": 80,
